@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaKa Makes - Cosméticos de Alta Qualidade</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #D81B60;
+            --primary-light: #f8bbd0;
+            --primary-dark: #880e4f;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            padding-top: 80px;
+        }
+        
+        .cart-item-enter {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        .cart-item-enter-active {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 300ms ease;
+        }
+        .cart-item-exit {
+            opacity: 1;
+        }
+        .cart-item-exit-active {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 300ms ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .cart-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .whatsapp-btn:hover {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .hamburger span {
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+        
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Floating label animation */
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .input-group label {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            color: #9ca3af;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+        
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -0.6rem;
+            left: 0.8rem;
+            font-size: 0.75rem;
+            background: white;
+            padding: 0 0.5rem;
+            color: var(--primary);
+        }
+        
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.2);
+        }
+        
+        /* Product badge */
+        .product-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" class="text-2xl font-bold text-pink-600 flex items-center" style="color: var(--primary);">
+                    <i class="fas fa-paint-brush mr-2"></i>
+                    KaKa Makes
+                </a>
+            </div>
+            
+            <div class="hidden md:flex space-x-6">
+                <a href="#products" class="hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-store mr-1"></i> Produtos
+                </a>
+                <a href="#testimonials" class="hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-star mr-1"></i> Depoimentos
+                </a>
+                <a href="#about" class="hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-info-circle mr-1"></i> Sobre
+                </a>
+                <a href="#contact" class="hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-envelope mr-1"></i> Contato
+                </a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <button id="cart-btn" class="text-gray-700 hover:text-pink-600 transition cart-btn">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                </div>
+                
+                <a href="https://wa.me/5514996651947" target="_blank" class="bg-green-500 text-white p-2 rounded-full whatsapp-btn transition">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                </a>
+                
+                <button id="hamburger" class="md:hidden flex flex-col space-y-1.5">
+                    <span class="w-6 h-0.5 bg-gray-800"></span>
+                    <span class="w-6 h-0.5 bg-gray-800"></span>
+                    <span class="w-6 h-0.5 bg-gray-800"></span>
+                </button>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="mobile-menu md:hidden bg-white shadow-md">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#products" class="py-2 hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-store mr-2 w-5"></i> Produtos
+                </a>
+                <a href="#testimonials" class="py-2 hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-star mr-2 w-5"></i> Depoimentos
+                </a>
+                <a href="#about" class="py-2 hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-info-circle mr-2 w-5"></i> Sobre
+                </a>
+                <a href="#contact" class="py-2 hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-envelope mr-2 w-5"></i> Contato
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-r from-pink-100 to-pink-50 py-16 md:py-24 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-0 right-0 w-1/2 h-full bg-pink-200 opacity-10 transform rotate-12 origin-top-right"></div>
+        </div>
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center relative z-10">
+            <div class="md:w-1/2 mb-8 md:mb-0">
+                <span class="inline-block bg-pink-600 text-white text-sm px-3 py-1 rounded-full mb-4">Novos produtos lançados!</span>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4" style="color: var(--primary);">Realce sua beleza com KaKa Makes ✨</h1>
+                <p class="text-lg mb-6 text-gray-700">Produtos de alta qualidade que valorizam sua beleza natural com fórmulas suaves e resultados incríveis.</p>
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                    <a href="#products" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg">
+                        Ver produtos
+                    </a>
+                    <a href="#testimonials" class="inline-block border border-pink-600 text-pink-600 hover:bg-pink-50 font-medium py-3 px-8 rounded-full transition transform hover:scale-105">
+                        Depoimentos
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center relative">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Produtos KaKa Makes" class="rounded-lg shadow-xl w-full max-w-md transform hover:rotate-1 transition duration-300">
+                    <div class="absolute -bottom-4 -left-4 bg-white p-4 rounded-lg shadow-lg hidden md:block">
+                        <div class="flex items-center">
+                            <div class="bg-pink-100 text-pink-600 p-2 rounded-full mr-3">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold">Frete Grátis</p>
+                                <p class="text-sm text-gray-600">Para compras acima de R$ 150</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Products Section -->
+    <section id="products" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4" style="color: var(--primary);">Nossos Produtos 💄</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Descubra nossa linha completa de produtos de beleza que vão realçar sua beleza natural.</p>
+            </div>
+            
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex rounded-md shadow-sm">
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium rounded-l-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="all">
+                        Todos
+                    </button>
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium border-t border-b border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="face">
+                        Rosto
+                    </button>
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="eyes">
+                        Olhos
+                    </button>
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium border-t border-b border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="lips">
+                        Lábios
+                    </button>
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium rounded-r-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="skincare">
+                        Skincare
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="products-container">    
+                     <!-- Escova Desembaraçante Bellê -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative" data-category="face">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center relative">
+                        <img src="Escova.jpeg" alt="Escova Desembaraçante Bellê" class="h-full object-contain">
+                        <span class="product-badge">Edição Limitada</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Escova Desembaraçante Bellê - Verde</h3>
+                        <p class="text-gray-600 text-sm mb-3">Cuida dos fios com carinho e sem puxões – edição limitada!</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                                <span class="text-xs text-gray-500 line-through ml-1">R$ 30,99</span>
+                            </div>   
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="27" data-name="Escova Desembaraçante Bellê" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>   
+               
+               
+                <!-- primer -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative" data-category="face">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center relative">
+                        <img src="primer.jpg" alt="Primer Facial" class="h-full object-contain">
+                        <span class="product-badge">Mais vendido</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Primer Facial</h3>
+                        <p class="text-gray-600 text-sm mb-3">Prepara a pele para uma maquiagem perfeita e duradoura</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                                <span class="text-xs text-gray-500 line-through ml-1">R$ 17,99</span>
+                            </div>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="1" data-name="Primer Facial" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Base Líquida -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="face">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="baseliquida.jpg" alt="Base Líquida" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Base Líquida</h3>
+                        <p class="text-gray-600 text-sm mb-3">Cobertura natural e acabamento aveludado</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="2" data-name="Base Líquida" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        
+                
+                <!-- Gloss Labial -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="lips">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="gloss.jpg" alt="Gloss Labial" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Gloss Labial</h3>
+                        <p class="text-gray-600 text-sm mb-3">Brilho intenso com hidratação prolongada</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="4" data-name="Gloss Labial" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sérum 10 em 1-->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="skincare">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="serun10em1.jpg" alt="Sérum 10 em 1" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Sérum 10 em 1</h3>
+                        <p class="text-gray-600 text-sm mb-3">Um aliado poderoso com múltiplos benefícios para sua pele</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="5" data-name="Sérum 10 em 1" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Rímel -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="eyes">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="rimel.jpg" alt="Rímel" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Rímel</h3>
+                        <p class="text-gray-600 text-sm mb-3">Volume e comprimento sem grudar</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="6" data-name="Rímel" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pó Compacto -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="face">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="po.jpeg" alt="Pó Compacto" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Pó Compacto</h3>
+                        <p class="text-gray-600 text-sm mb-3">Controle de oleosidade e acabamento perfeito</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="7" data-name="Pó Compacto" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Blush -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="face">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="blush.jpeg" alt="Blush" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Blush</h3>
+                        <p class="text-gray-600 text-sm mb-3">Cor natural e duradoura para suas maçãs</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,90</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="8" data-name="Blush" data-price="15.90">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <button id="load-more" class="bg-white border border-pink-600 text-pink-600 hover:bg-pink-50 font-medium py-2 px-6 rounded-full transition flex items-center mx-auto">
+                    <span id="load-more-text">Carregar mais produtos</span>
+                    <span id="load-more-spinner" class="hidden ml-2">
+                        <i class="fas fa-spinner spinner"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-16 bg-pink-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4" style="color: var(--primary);">O que dizem sobre nós 💖</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Veja o que nossas clientes estão falando sobre os produtos KaKa Makes.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold mr-4">A</div>
+                        <div>
+                            <h4 class="font-bold">Ana Clara</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"A base líquida da KaKa Makes é incrível! Cobre bem sem pesar na pele e dura o dia todo. Já comprei várias vezes e recomendo!"</p>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold mr-4">J</div>
+                        <div>
+                            <h4 class="font-bold">Juliana</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Comprei o kit completo e amei! Os produtos têm ótima qualidade e o preço é justo. O atendimento pelo WhatsApp foi super rápido e atencioso."</p>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold mr-4">M</div>
+                        <div>
+                            <h4 class="font-bold">Mariana</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"O gloss labial é o melhor que já usei! Não é grudento e hidrata bem os lábios. Já estou querendo comprar em outras cores."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--primary);">Sobre a KaKa Makes 🌸</h2>
+                    <p class="text-gray-600 mb-4">A KaKa Makes nasceu da paixão por maquiagem e do desejo de oferecer produtos de alta qualidade a preços acessíveis.</p>
+                    <p class="text-gray-600 mb-4">Nossos produtos são desenvolvidos com ingredientes selecionados e testados dermatologicamente para garantir segurança e eficácia.</p>
+                    <p class="text-gray-600 mb-6">Acreditamos que a maquiagem é uma forma de expressão e autoestima, e queremos que todas se sintam lindas e confiantes.</p>
+                    <div class="flex space-x-4">
+                        <div class="bg-pink-100 text-pink-600 p-3 rounded-full">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Missão</h4>
+                            <p class="text-gray-600 text-sm">Empoderar mulheres através da beleza com produtos de qualidade.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="relative">
+                        <img src="fundadora.jpg" alt="Sobre KaKa Makes" class="rounded-lg shadow-lg w-full">
+                        <div class="absolute -bottom-4 -right-4 bg-pink-600 text-white p-4 rounded-lg shadow-lg hidden md:block">
+                            <p class="font-bold">+180</p>
+                            <p class="text-sm">Clientes satisfeitas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-pink-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4" style="color: var(--primary);">Entre em Contato 📞</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Tem dúvidas ou precisa de ajuda? Entre em contato conosco!</p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                    <form class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="input-group mb-6">
+                            <input type="text" id="name" placeholder=" " required>
+                            <label for="name">Seu Nome</label>
+                        </div>
+                        
+                        <div class="input-group mb-6">
+                            <input type="email" id="email" placeholder=" " required>
+                            <label for="email">Seu email</label>
+                        </div>
+                        
+                        <div class="input-group mb-6">
+                            <input type="tel" id="phone" placeholder=" ">
+                            <label for="phone">Seu telefone (Opcional)</label>
+                        </div>
+                        
+                        <div class="input-group mb-6">
+                            <textarea id="message" rows="4" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-600 focus:ring-1 focus:ring-pink-600" placeholder="Sua mensagem"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-4 rounded-lg transition">
+                            Enviar mensagem
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="md:w-1/2 md:pl-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md h-full">
+                        <h3 class="font-bold text-lg mb-6" style="color: var(--primary);">Informações de Contato</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="bg-pink-100 text-pink-600 p-3 rounded-full mr-4">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">Endereço</h4>
+                                    <p class="text-gray-600">Carlos Thomal 1361 Jardim Itamarati - apenas retirada<br>Ourinhos - SP</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-pink-100 text-pink-600 p-3 rounded-full mr-4">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">E-mail</h4>
+                                    <p class="text-gray-600">Em breve...</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-pink-100 text-pink-600 p-3 rounded-full mr-4">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">WhatsApp</h4>
+                                    <p class="text-gray-600">(14) 99665-1947</p>
+                                    <a href="https://wa.me/5514996651947" target="_blank" class="inline-block mt-2 bg-green-500 hover:bg-green-600 text-white text-sm py-1 px-3 rounded-full transition">
+                                        Enviar mensagem
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-pink-100 text-pink-600 p-3 rounded-full mr-4">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">Horário de Atendimento</h4>
+                                    <p class="text-gray-600">Segunda a Sexta: 9h às 18h<br>Sábado: 9h às 13h</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-12 bg-pink-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold mb-4">Receba novidades e promoções ✉️</h2>
+            <p class="mb-6 max-w-2xl mx-auto">Cadastre seu e-mail para receber nossas novidades, lançamentos e ofertas especiais.</p>
+            <form class="flex flex-col sm:flex-row max-w-md mx-auto sm:max-w-xl">
+                <input type="email" placeholder="Seu melhor e-mail" class="flex-grow px-4 py-3 rounded-l sm:rounded-r-none mb-2 sm:mb-0 text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-800">
+                <button type="submit" class="bg-pink-800 hover:bg-pink-900 px-6 py-3 rounded-r sm:rounded-l-none font-medium transition">
+                    Cadastrar
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center" style="color: var(--primary);">
+                        <i class="fas fa-paint-brush mr-2"></i>
+                        KaKa Makes
+                    </h3>
+                    <p class="mb-4">Cosméticos de alta qualidade para realçar sua beleza natural.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-tiktok text-xl"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Links Úteis</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Política de Privacidade</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Termos de Uso</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Trocas e Devoluções</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Formas de Pagamento</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Prazos de Entrega</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Minha Conta</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Minha Conta</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Meus Pedidos</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Lista de Desejos</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Newsletter</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Contato</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fab fa-whatsapp mr-2 text-green-400"></i>
+                            <a href="https://wa.me/5514996651947" target="_blank" class="text-gray-400 hover:text-white transition">(14) 99665-1947</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-pink-400"></i>
+                            <a href="mailto:contato@kakamakes.com" class="text-gray-400 hover:text-white transition">contato@kakamakes.com</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2 text-red-400"></i>
+                            <span class="text-gray-400">Ourinhos,SP Brasil</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 KaKa Makes. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-lg transform translate-x-full z-50 transition duration-300 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold flex items-center" style="color: var(--primary);">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Seu Carrinho 🛒
+                </h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="mb-6">
+                <!-- Cart items will be added here dynamically -->
+                <div class="text-center py-8">
+                    <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">Seu carrinho está vazio</p>
+                    <a href="#products" class="inline-block mt-4 bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-6 rounded-full transition" onclick="closeCartSidebar()">
+                        Ver produtos
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-4 mb-4">
+                <div class="flex justify-between font-bold text-lg mb-4">
+                    <span>Total:</span>
+                    <span id="cart-total">R$ 0,00</span>
+                </div>
+                
+                <a id="checkout-btn" href="https://wa.me/5514996651947" target="_blank" class="block bg-green-500 hover:bg-green-600 text-white text-center py-3 px-4 rounded-lg font-medium transition mb-3">
+                    Finalizar Compra pelo WhatsApp <i class="fab fa-whatsapp ml-1"></i>
+                </a>
+                
+                <button id="continue-shopping" class="w-full border border-pink-600 text-pink-600 hover:bg-pink-50 py-3 px-4 rounded-lg font-medium transition">
+                    Continuar Comprando
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/5514996651947" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg whatsapp-btn transition z-30">
+        <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-20 right-6 bg-pink-600 text-white p-3 rounded-full shadow-lg hidden transition z-30">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('open');
+            });
+        });
+        
+        // Cart Functionality
+        const cartBtn = document.getElementById('cart-btn');
+        const closeCart = document.getElementById('close-cart');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const continueShopping = document.getElementById('continue-shopping');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const cartCount = document.getElementById('cart-count');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        
+        let cart = [];
+        
+        // Open Cart
+        cartBtn.addEventListener('click', () => {
+            cartSidebar.classList.remove('translate-x-full');
+            cartOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Close Cart
+        function closeCartSidebar() {
+            cartSidebar.classList.add('translate-x-full');
+            cartOverlay.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+        
+        closeCart.addEventListener('click', closeCartSidebar);
+        cartOverlay.addEventListener('click', closeCartSidebar);
+        continueShopping.addEventListener('click', closeCartSidebar);
+        
+        // Add to Cart
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const price = parseFloat(button.getAttribute('data-price'));
+                
+                // Check if item already in cart
+                const existingItem = cart.find(item => item.id === id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id,
+                        name,
+                        price,
+                        quantity: 1
+                    });
+                }
+                
+                updateCart();
+                
+                // Add animation to button
+                button.innerHTML = '<i class="fas fa-check"></i> Adicionado';
+                button.classList.remove('bg-pink-100', 'text-pink-600');
+                button.classList.add('bg-green-100', 'text-green-600');
+                
+                setTimeout(() => {
+                    button.innerHTML = '+ Adicionar';
+                    button.classList.remove('bg-green-100', 'text-green-600');
+                    button.classList.add('bg-pink-100', 'text-pink-600');
+                }, 1500);
+            });
+        });
+        
+        // Update Cart
+        function updateCart() {
+            // Update cart items
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500">Seu carrinho está vazio</p>
+                        <a href="#products" class="inline-block mt-4 bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-6 rounded-full transition" onclick="closeCartSidebar()">
+                            Ver produtos
+                        </a>
+                    </div>
+                `;
+            } else {
+                cartItemsContainer.innerHTML = cart.map(item => `
+                    <div class="cart-item flex justify-between items-center py-3 border-b border-gray-100">
+                        <div>
+                            <h4 class="font-medium">${item.name}</h4>
+                            <p class="text-sm text-gray-500">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                        <div class="flex items-center">
+                            <button class="decrease-quantity text-gray-500 hover:text-pink-600 px-2" data-id="${item.id}">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <span class="mx-2">${item.quantity}</span>
+                            <button class="increase-quantity text-gray-500 hover:text-pink-600 px-2" data-id="${item.id}">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                            <button class="remove-item text-gray-500 hover:text-red-500 ml-4" data-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add event listeners to new buttons
+                document.querySelectorAll('.decrease-quantity').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.target.closest('button').getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        
+                        if (item.quantity > 1) {
+                            item.quantity -= 1;
+                        } else {
+                            cart = cart.filter(item => item.id !== id);
+                        }
+                        
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.increase-quantity').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.target.closest('button').getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        item.quantity += 1;
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.target.closest('button').getAttribute('data-id');
+                        cart = cart.filter(item => item.id !== id);
+                        updateCart();
+                    });
+                });
+            }
+            
+            // Update total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            
+            // Update count
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = count;
+            
+            // Update checkout link
+            if (cart.length > 0) {
+                const message = `Olá! Gostaria de comprar os seguintes produtos:\n\n${cart.map(item => `- ${item.name} (${item.quantity}x) - R$ ${(item.price * item.quantity).toFixed(2)}`).join('\n')}\n\nTotal: R$ ${total.toFixed(2)}`;
+                checkoutBtn.href = `https://wa.me/5514996651947?text=${encodeURIComponent(message)}`;
+            }
+        }
+        
+        // Product Category Filter
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const productsContainer = document.getElementById('products-container');
+        
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                categoryButtons.forEach(btn => {
+                    btn.classList.remove('bg-pink-600', 'text-white');
+                    btn.classList.add('bg-white', 'text-gray-700');
+                });
+                
+                button.classList.remove('bg-white', 'text-gray-700');
+                button.classList.add('bg-pink-600', 'text-white');
+                
+                // Filter products
+                const category = button.getAttribute('data-category');
+                const products = document.querySelectorAll('.product-card');
+                
+                products.forEach(product => {
+                    if (category === 'all' || product.getAttribute('data-category') === category) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Load More Products
+        const loadMoreBtn = document.getElementById('load-more');
+        const loadMoreText = document.getElementById('load-more-text');
+        const loadMoreSpinner = document.getElementById('load-more-spinner');
+        
+        loadMoreBtn.addEventListener('click', () => {
+            // Show loading state
+            loadMoreText.textContent = 'Carregando...';
+            loadMoreSpinner.classList.remove('hidden');
+            loadMoreBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // In a real scenario, this would fetch more products from an API
+                // For this example, we'll just duplicate some existing products
+                
+                const moreProducts = [
+                    {
+                        id: "9",
+                        name: "Água Micelar",
+                        price: 15.90,
+                        desc: "impa, demaquila e hidrata",
+                        img: "aguamicelar.jpg",
+                        category: "face"
+                    },
+                    {
+                        id: "10",
+                        name: "Base Siliconada",
+                        price: 15.90,
+                        desc: "Textura leve com acabamento aveludado",
+                        img: "basesiliconada.jpg",
+                        category: "face"
+                    },
+                    {
+                        id: "11",
+                        name: "Cilíos",
+                        price: 59.90,
+                        desc: "Cilios para realçar sua beleza",
+                        img: "cilios.jpg",
+                        category: "eyes"
+                    },
+                    {
+                        id: "12",
+                        name: "Esponja de Maquiagem",
+                        price: 15.99,
+                        desc: "Aplicação perfeita para base e corretivo",
+                        img: "kitesponja.jpg",
+                        category: "face"
+                    },
+                      {
+                        id: "13",
+                        name: "Cola Para Cilíos",
+                        price: 15.99,
+                        desc: "Fixação poderosa e acabamento natural",
+                        img: "cola.jpg",
+                        category: "eyes"
+                    },
+                     {
+                        id: "14",
+                        name: "Escovas p/ Cílios e Sobrancelha",
+                        price: 15.99,
+                        desc: "Pacote com 100 unidades 💖",
+                        img: "escovacilios.jpg",
+                        category: "eyes"
+                    },
+                      {
+                        id: "15",
+                        name: "Esfoliante Facial",
+                        price: 19.99,
+                        desc: "Remove células mortas e deixa a pele renovada e macia.",
+                        img: "esfoliante.jpg",
+                        category: "skincare"
+                    },
+                     {
+                        id: "16",
+                        name: "Gloss Super Bocão",
+                        price: 15.99,
+                        desc: "Brilho extremo e efeito de volume instantâneo",
+                        img: "gloss2.jpg",
+                        category: "lips"
+                    },
+                     {
+                        id: "17",
+                        name: "Lápis de Olho",
+                        price: 6.99,
+                        desc: "Pigmentação marcante e textura macia para seus olhos.",
+                        img: "lapis.jpg",
+                        category: "eyes"
+                    },
+                     {
+                        id: "18",
+                        name: "Lip Gloss VIVAI",
+                        price: 15.99,
+                        desc: "Brilho intenso e hidratação",
+                        img: "lipgloss.jpg",
+                        category: "lips"
+                    },
+                     {
+                        id: "19",
+                        name: "Máscara Facial",
+                        price: 15.99,
+                        desc: "Tratamento intenso para hidratar e renovar a pele.",
+                        img: "mascarafacial.jpg",
+                        category: "skincare"
+                    },
+                     {
+                        id: "20",
+                        name: "Máscara para Cílios",
+                        price: 15.99,
+                        desc: "Alonga, dá volume e define até os cílios invisíveis",
+                        img: "mascarasparacilios.jpg",
+                        category: "eyes"
+                    },
+                     {
+                        id: "21",
+                        name: "Água Micelar",
+                        price: 15.99,
+                        desc: "Limpeza suave e eficaz para a pele.",
+                        img: "micelar.jpg",
+                        category: "skincare"
+                    },
+                     {
+                        id: "22",
+                        name: "Sérum Redutor de Poros",
+                        price: 15.99,
+                        desc: "Minimiza os poros e melhora a textura da pele",
+                        img: "serum.jpeg",
+                        category: "skincare"
+                    },  
+                     {
+                        id: "23",
+                        name: "Paleta de Sombras",
+                        price: 15.99,
+                        desc: "Versátil e compacta para sua rotina de maquiagem.",
+                        img: "sombra1.jpg",
+                        category: "face"
+                    },
+                     {
+                        id: "24",
+                        name: "Paleta de Sombras Infinity",
+                        price: 15.99,
+                        desc: ">Cores intensas, acabamento profissional e alta pigmentação",
+                        img: "sombra2.jpg",
+                        category: "face"
+                    },
+                    {
+                        id: "25",
+                        name: "Paleta de Sombras Lua&Neve",
+                        price: 15.99,
+                        desc: ">Cores intensas, acabamento profissional e alta pigmentação",
+                        img: "sombra.jpg",
+                        category: "face"
+                    },
+                        {
+                        id: "26",
+                        name: "Escova Desembaraçante Bellê - Verde",
+                        price: 15.99,
+                        desc: ">Cuida dos fios com carinho e sem puxões – edição limitada!",
+                        img: "Escova.jpeg",
+                        category: "skincare"
+                    },
+  {
+                        id: "28",
+                        name: "Toalhas Umedecidas",
+                        price: 15.99,
+                        desc: ">Praticidade e cuidado com a pele no seu dia a dia.",
+                        img: "toalha.jpg",
+                        category: "skincare"
+                    },
+                ];
+                
+                moreProducts.forEach(product => {
+                    const productHTML = `
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="${product.category}">
+                            <div class="h-48 bg-pink-50 flex items-center justify-center">
+                                <img src="${product.img}" alt="${product.name}" class="h-full object-contain">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-lg mb-1">${product.name}</h3>
+                                <p class="text-gray-600 text-sm mb-3">${product.desc}</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold" style="color: var(--primary);">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                                    <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
+                                        + Adicionar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    productsContainer.insertAdjacentHTML('beforeend', productHTML);
+                });
+                
+                // Reattach event listeners to new buttons
+                document.querySelectorAll('.add-to-cart').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        const name = this.getAttribute('data-name');
+                        const price = parseFloat(this.getAttribute('data-price'));
+                        
+                        const existingItem = cart.find(item => item.id === id);
+                        
+                        if (existingItem) {
+                            existingItem.quantity += 1;
+                        } else {
+                            cart.push({
+                                id,
+                                name,
+                                price,
+                                quantity: 1
+                            });
+                        }
+                        
+                        updateCart();
+                        
+                        // Add animation to button
+                        this.innerHTML = '<i class="fas fa-check"></i> Adicionado';
+                        this.classList.remove('bg-pink-100', 'text-pink-600');
+                        this.classList.add('bg-green-100', 'text-green-600');
+                        
+                        setTimeout(() => {
+                            this.innerHTML = '+ Adicionar';
+                            this.classList.remove('bg-green-100', 'text-green-600');
+                            this.classList.add('bg-pink-100', 'text-pink-600');
+                        }, 1500);
+                    });
+                });
+                
+                // Hide load more button after loading all products
+                loadMoreBtn.style.display = 'none';
+                
+                // Reset loading state (though button will be hidden)
+                loadMoreText.textContent = 'Carregar mais produtos';
+                loadMoreSpinner.classList.add('hidden');
+                loadMoreBtn.disabled = false;
+            }, 1500);
+        });
+        
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('hidden');
+            } else {
+                backToTopButton.classList.add('hidden');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
