@@ -775,219 +775,207 @@
     </button>
 
     <script>
-        // Mobile Menu Toggle
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobile-menu');
+    // Mobile Menu Toggle
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('open');
-        });
+hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+});
 
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                mobileMenu.classList.remove('open');
-            });
-        });
+// Close mobile menu when clicking on a link
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('open');
+    });
+});
 
-        // Cart Functionality
-        const cartBtn = document.getElementById('cart-btn');
-        const closeCart = document.getElementById('close-cart');
-        const cartSidebar = document.getElementById('cart-sidebar');
-        const cartOverlay = document.getElementById('cart-overlay');
-        const continueShopping = document.getElementById('continue-shopping');
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        const cartItemsContainer = document.getElementById('cart-items');
-        const cartTotal = document.getElementById('cart-total');
-        const cartCount = document.getElementById('cart-count');
-        const checkoutBtn = document.getElementById('checkout-btn');
+// Cart Functionality
+const cartBtn = document.getElementById('cart-btn');
+const closeCart = document.getElementById('close-cart');
+const cartSidebar = document.getElementById('cart-sidebar');
+const cartOverlay = document.getElementById('cart-overlay');
+const continueShopping = document.getElementById('continue-shopping');
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotal = document.getElementById('cart-total');
+const cartCount = document.getElementById('cart-count');
+const checkoutBtn = document.getElementById('checkout-btn');
 
-        let cart = [];
+let cart = [];
 
-        // Open Cart
-        cartBtn.addEventListener('click', () => {
-            cartSidebar.classList.remove('translate-x-full');
-            cartOverlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        });
+// Open Cart
+cartBtn.addEventListener('click', () => {
+    cartSidebar.classList.remove('translate-x-full');
+    cartOverlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+});
 
-        // Close Cart
-        function closeCartSidebar() {
-            cartSidebar.classList.add('translate-x-full');
-            cartOverlay.classList.add('hidden');
-            document.body.style.overflow = 'auto';
+// Close Cart
+function closeCartSidebar() {
+    cartSidebar.classList.add('translate-x-full');
+    cartOverlay.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+closeCart.addEventListener('click', closeCartSidebar);
+cartOverlay.addEventListener('click', closeCartSidebar);
+continueShopping.addEventListener('click', closeCartSidebar);
+
+// Add to Cart
+addToCartButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const id = button.getAttribute('data-id');
+        const name = button.getAttribute('data-name');
+        const price = parseFloat(button.getAttribute('data-price'));
+
+        const existingItem = cart.find(item => item.id === id);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ id, name, price, quantity: 1 });
         }
 
-        closeCart.addEventListener('click', closeCartSidebar);
-        cartOverlay.addEventListener('click', closeCartSidebar);
-        continueShopping.addEventListener('click', closeCartSidebar);
+        updateCart();
 
-        // Add to Cart
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const id = button.getAttribute('data-id');
-                const name = button.getAttribute('data-name');
-                const price = parseFloat(button.getAttribute('data-price'));
+        button.innerHTML = '<i class="fas fa-check"></i> Adicionado';
+        button.classList.remove('bg-pink-100', 'text-pink-600');
+        button.classList.add('bg-green-100', 'text-green-600');
 
-                // Check if item already in cart
-                const existingItem = cart.find(item => item.id === id);
+        setTimeout(() => {
+            button.innerHTML = '+ Adicionar';
+            button.classList.remove('bg-green-100', 'text-green-600');
+            button.classList.add('bg-pink-100', 'text-pink-600');
+        }, 1500);
+    });
+});
 
-                if (existingItem) {
-                    existingItem.quantity += 1;
+// Update Cart
+function updateCart() {
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `
+            <div class="text-center py-8">
+                <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500">Seu carrinho está vazio</p>
+                <a href="#products" class="inline-block mt-4 bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-6 rounded-full transition" onclick="closeCartSidebar()">
+                    Ver produtos
+                </a>
+            </div>
+        `;
+    } else {
+        cartItemsContainer.innerHTML = cart.map(item => `
+            <div class="cart-item flex justify-between items-center py-3 border-b border-gray-100">
+                <div>
+                    <h4 class="font-medium">${item.name}</h4>
+                    <p class="text-sm text-gray-500">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+                </div>
+                <div class="flex items-center">
+                    <button class="decrease-quantity text-gray-500 hover:text-pink-600 px-2" data-id="${item.id}">
+                        <i class="fas fa-minus text-xs"></i>
+                    </button>
+                    <span class="mx-2">${item.quantity}</span>
+                    <button class="increase-quantity text-gray-500 hover:text-pink-600 px-2" data-id="${item.id}">
+                        <i class="fas fa-plus text-xs"></i>
+                    </button>
+                    <button class="remove-item text-gray-500 hover:text-red-500 ml-4" data-id="${item.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.decrease-quantity').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.closest('button').getAttribute('data-id');
+                const item = cart.find(item => item.id === id);
+
+                if (item.quantity > 1) {
+                    item.quantity -= 1;
                 } else {
-                    cart.push({
-                        id,
-                        name,
-                        price,
-                        quantity: 1
-                    });
+                    cart = cart.filter(item => item.id !== id);
                 }
 
                 updateCart();
-
-                // Add animation to button
-                button.innerHTML = '<i class="fas fa-check"></i> Adicionado';
-                button.classList.remove('bg-pink-100', 'text-pink-600');
-                button.classList.add('bg-green-100', 'text-green-600');
-
-                setTimeout(() => {
-                    button.innerHTML = '+ Adicionar';
-                    button.classList.remove('bg-green-100', 'text-green-600');
-                    button.classList.add('bg-pink-100', 'text-pink-600');
-                }, 1500);
             });
         });
 
-        // Update Cart
-        function updateCart() {
-            // Update cart items
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `
-                    <div class="text-center py-8">
-                        <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500">Seu carrinho está vazio</p>
-                        <a href="#products" class="inline-block mt-4 bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-6 rounded-full transition" onclick="closeCartSidebar()">
-                            Ver produtos
-                        </a>
-                    </div>
-                `;
+        document.querySelectorAll('.increase-quantity').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.closest('button').getAttribute('data-id');
+                const item = cart.find(item => item.id === id);
+                item.quantity += 1;
+                updateCart();
+            });
+        });
+
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.closest('button').getAttribute('data-id');
+                cart = cart.filter(item => item.id !== id);
+                updateCart();
+            });
+        });
+    }
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotal.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = count;
+
+    if (cart.length > 0) {
+        const message = `Olá! Gostaria de comprar os seguintes produtos:\n\n${cart.map(item => `- ${item.name} (${item.quantity}x) - R$ ${(item.price * item.quantity).toFixed(2)}`).join('\n')}\n\nTotal: R$ ${total.toFixed(2)}`;
+        checkoutBtn.href = `https://wa.me/5514996651947?text=${encodeURIComponent(message)}`;
+    }
+}
+
+// Product Category Filter
+const categoryButtons = document.querySelectorAll('.category-btn');
+const productsContainer = document.getElementById('products-container');
+
+categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        categoryButtons.forEach(btn => {
+            btn.classList.remove('bg-pink-600', 'text-white');
+            btn.classList.add('bg-white', 'text-gray-700');
+        });
+
+        button.classList.remove('bg-white', 'text-gray-700');
+        button.classList.add('bg-pink-600', 'text-white');
+
+        const category = button.getAttribute('data-category');
+        const products = document.querySelectorAll('.product-card');
+
+        products.forEach(product => {
+            if (category === 'all' || product.getAttribute('data-category') === category) {
+                product.style.display = 'block';
             } else {
-                cartItemsContainer.innerHTML = cart.map(item => `
-                    <div class="cart-item flex justify-between items-center py-3 border-b border-gray-100">
-                        <div>
-                            <h4 class="font-medium">${item.name}</h4>
-                            <p class="text-sm text-gray-500">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
-                        </div>
-                        <div class="flex items-center">
-                            <button class="decrease-quantity text-gray-500 hover:text-pink-600 px-2" data-id="${item.id}">
-                                <i class="fas fa-minus text-xs"></i>
-                            </button>
-                            <span class="mx-2">${item.quantity}</span>
-                            <button class="increase-quantity text-gray-500 hover:text-pink-600 px-2" data-id="${item.id}">
-                                <i class="fas fa-plus text-xs"></i>
-                            </button>
-                            <button class="remove-item text-gray-500 hover:text-red-500 ml-4" data-id="${item.id}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-
-                // Add event listeners to new buttons
-                document.querySelectorAll('.decrease-quantity').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const id = e.target.closest('button').getAttribute('data-id');
-                        const item = cart.find(item => item.id === id);
-
-                        if (item.quantity > 1) {
-                            item.quantity -= 1;
-                        } else {
-                            cart = cart.filter(item => item.id !== id);
-                        }
-
-                        updateCart();
-                    });
-                });
-
-                document.querySelectorAll('.increase-quantity').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const id = e.target.closest('button').getAttribute('data-id');
-                        const item = cart.find(item => item.id === id);
-                        item.quantity += 1;
-                        updateCart();
-                    });
-                });
-
-                document.querySelectorAll('.remove-item').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const id = e.target.closest('button').getAttribute('data-id');
-                        cart = cart.filter(item => item.id !== id);
-                        updateCart();
-                    });
-                });
+                product.style.display = 'none';
             }
-
-            // Update total
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            cartTotal.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
-
-            // Update count
-            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.textContent = count;
-
-            // Update checkout link
-            if (cart.length > 0) {
-                const message = `Olá! Gostaria de comprar os seguintes produtos:\n\n${cart.map(item => `- ${item.name} (${item.quantity}x) - R$ ${(item.price * item.quantity).toFixed(2)}`).join('\n')}\n\nTotal: R$ ${total.toFixed(2)}`;
-                checkoutBtn.href = `https://wa.me/5514996651947?text=${encodeURIComponent(message)}`;
-            }
-        }
-
-        // Product Category Filter
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        const productsContainer = document.getElementById('products-container');
-
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Update active button
-                categoryButtons.forEach(btn => {
-                    btn.classList.remove('bg-pink-600', 'text-white');
-                    btn.classList.add('bg-white', 'text-gray-700');
-                });
-
-                button.classList.remove('bg-white', 'text-gray-700');
-                button.classList.add('bg-pink-600', 'text-white');
-
-                // Filter products
-                const category = button.getAttribute('data-category');
-                const products = document.querySelectorAll('.product-card');
-
-                products.forEach(product => {
-                    if (category === 'all' || product.getAttribute('data-category') === category) {
-                        product.style.display = 'block';
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-            });
         });
+    });
+});
 
-        // Load More Products
-        const loadMoreBtn = document.getElementById('load-more');
-        const loadMoreText = document.getElementById('load-more-text');
-        const loadMoreSpinner = document.getElementById('load-more-spinner');
+// Load More Products
+const loadMoreBtn = document.getElementById('load-more');
+const loadMoreText = document.getElementById('load-more-text');
+const loadMoreSpinner = document.getElementById('load-more-spinner');
 
-        loadMoreBtn.addEventListener('click', () => {
-            // Show loading state
-            loadMoreText.textContent = 'Carregando...';
-            loadMoreSpinner.classList.remove('hidden');
-            loadMoreBtn.disabled = true;
+loadMoreBtn.addEventListener('click', () => {
+    loadMoreText.textContent = 'Carregando...';
+    loadMoreSpinner.classList.remove('hidden');
+    loadMoreBtn.disabled = true;
 
-            // Simulate API call
-            setTimeout(() => {
-                // In a real scenario, this would fetch more products from an API
-                // For this example, we'll just duplicate some existing products
+    setTimeout(() => {
+        // Aqui você adicionaria a lógica real de API
+        loadMoreText.textContent = 'Carregar mais';
+        loadMoreSpinner.classList.add('hidden');
+        loadMoreBtn.disabled = false;
+    }, 2000);
+});
 
                 const moreProducts = [
                     {
@@ -1238,7 +1226,7 @@
                         img: "Escova.jpeg",
                         category: "all
                     },
-                                                    {
+                           {                           
                         id: "41",
                         name: "🧼 Pó Compacto: pele selada, zero oleosidade!",
                         price: 15.99,
