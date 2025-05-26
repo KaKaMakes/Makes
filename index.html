@@ -7,20 +7,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="logo.jpeg" type="image/x-icon">
+<link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2I8XfK-Hp7_dd23a5JYm4C_D_V_PlDEZZWRDDSvGQ39QqlxcfapLBfA1l&s=10" type="image/x-icon">
     <style>
         :root {
             --primary: #D81B60;
             --primary-light: #f8bbd0;
             --primary-dark: #880e4f;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             scroll-behavior: smooth;
             padding-top: 80px;
         }
-        
+
         .cart-item-enter {
             opacity: 0;
             transform: translateX(20px);
@@ -38,76 +38,76 @@
             transform: translateX(20px);
             transition: all 300ms ease;
         }
-        
+
         .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        
+
         .cart-btn:hover {
             transform: scale(1.05);
         }
-        
+
         .whatsapp-btn:hover {
             animation: pulse 1.5s infinite;
         }
-        
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-        
+
         .hamburger span {
             transition: all 0.3s ease;
         }
-        
+
         .hamburger.active span:nth-child(1) {
             transform: rotate(45deg) translate(5px, 5px);
         }
-        
+
         .hamburger.active span:nth-child(2) {
             opacity: 0;
         }
-        
+
         .hamburger.active span:nth-child(3) {
             transform: rotate(-45deg) translate(7px, -7px);
         }
-        
+
         .mobile-menu {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease;
         }
-        
+
         .mobile-menu.open {
             max-height: 500px;
         }
-        
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 4px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-dark);
         }
-        
+
         /* Floating label animation */
         .input-group {
             position: relative;
             margin-bottom: 1.5rem;
         }
-        
+
         .input-group input {
             width: 100%;
             padding: 1rem;
@@ -116,7 +116,7 @@
             outline: none;
             transition: all 0.3s;
         }
-        
+
         .input-group label {
             position: absolute;
             left: 1rem;
@@ -125,7 +125,7 @@
             transition: all 0.3s;
             pointer-events: none;
         }
-        
+
         .input-group input:focus + label,
         .input-group input:not(:placeholder-shown) + label {
             top: -0.6rem;
@@ -135,12 +135,12 @@
             padding: 0 0.5rem;
             color: var(--primary);
         }
-        
+
         .input-group input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.2);
         }
-        
+
         /* Product badge */
         .product-badge {
             position: absolute;
@@ -153,12 +153,12 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
-        
+
         /* Loading spinner */
         .spinner {
             animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -296,7 +296,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="products-container">    
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="products-container">     
                      <!-- baby liss -->
                 <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative" data-category="skincare">
                     <div class="h-48 bg-pink-50 flex items-center justify-center relative">
@@ -944,34 +944,12 @@
             }
         }
 
-   const categoryButtonContainer = document.querySelector('.category-buttons'); // classe do container onde os botões estão
+        // Product Category Filter
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const productsContainer = document.getElementById('products-container');
 
-categoryButtonContainer.addEventListener('click', (event) => {
-    const button = event.target.closest('.category-btn');
-    if (!button) return;
-
-    const category = button.getAttribute('data-category');
-
-    // Atualiza os botões ativos
-    document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.classList.remove('bg-pink-600', 'text-white');
-        btn.classList.add('bg-white', 'text-gray-700');
-    });
-
-    button.classList.remove('bg-white', 'text-gray-700');
-    button.classList.add('bg-pink-600', 'text-white');
-
-    // Mostra/oculta os produtos com base na categoria
-    document.querySelectorAll('.product-card').forEach(product => {
-        const productCategory = product.getAttribute('data-category');
-        if (category === 'all' || productCategory === category) {
-            product.style.display = 'block';
-        } else {
-            product.style.display = 'none';
-        }
-    });
-});
-
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
                 // Update active button
                 categoryButtons.forEach(btn => {
                     btn.classList.remove('bg-pink-600', 'text-white');
@@ -1270,7 +1248,7 @@ categoryButtonContainer.addEventListener('click', (event) => {
                     },
                 ];
 
-                moreProducts.forEach(product => {
+           moreProducts.forEach(product => {
                     const productHTML = `
                         <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="${product.category}">
                             <div class="h-48 bg-pink-50 flex items-center justify-center">
@@ -1292,41 +1270,40 @@ categoryButtonContainer.addEventListener('click', (event) => {
                     productsContainer.insertAdjacentHTML('beforeend', productHTML);
                 });
 
-        // Delegação de evento para botões "Adicionar"
-productsContainer.addEventListener('click', function(event) {
-    if (event.target && event.target.classList.contains('add-to-cart')) {
-        const button = event.target;
-        const id = button.getAttribute('data-id');
-        const name = button.getAttribute('data-name');
-        const price = parseFloat(button.getAttribute('data-price'));
+                // Reattach event listeners to new buttons
+                document.querySelectorAll('.add-to-cart').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        const name = this.getAttribute('data-name');
+                        const price = parseFloat(this.getAttribute('data-price'));
 
-        const existingItem = cart.find(item => item.id === id);
+                        const existingItem = cart.find(item => item.id === id);
 
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            cart.push({
-                id,
-                name,
-                price,
-                quantity: 1
-            });
-        }
+                        if (existingItem) {
+                            existingItem.quantity += 1;
+                        } else {
+                            cart.push({
+                                id,
+                                name,
+                                price,
+                                quantity: 1
+                            });
+                        }
 
-        updateCart();
+                        updateCart();
 
-        // Feedback visual
-        button.innerHTML = '<i class="fas fa-check"></i> Adicionado';
-        button.classList.remove('bg-pink-100', 'text-pink-600');
-        button.classList.add('bg-green-100', 'text-green-600');
+                        // Add animation to button
+                        this.innerHTML = '<i class="fas fa-check"></i> Adicionado';
+                        this.classList.remove('bg-pink-100', 'text-pink-600');
+                        this.classList.add('bg-green-100', 'text-green-600');
 
-        setTimeout(() => {
-            button.innerHTML = '+ Adicionar';
-            button.classList.remove('bg-green-100', 'text-green-600');
-            button.classList.add('bg-pink-100', 'text-pink-600');
-        }, 1500);
-    }
-});
+                        setTimeout(() => {
+                            this.innerHTML = '+ Adicionar';
+                            this.classList.remove('bg-green-100', 'text-green-600');
+                            this.classList.add('bg-pink-100', 'text-pink-600');
+                        }, 1500);
+                    });
+                });
 
                 // Hide load more button after loading all products
                 loadMoreBtn.style.display = 'none';
