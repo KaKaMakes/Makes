@@ -944,12 +944,34 @@
             }
         }
 
-        // Product Category Filter
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        const productsContainer = document.getElementById('products-container');
+   const categoryButtonContainer = document.querySelector('.category-buttons'); // classe do container onde os botões estão
 
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', () => {
+categoryButtonContainer.addEventListener('click', (event) => {
+    const button = event.target.closest('.category-btn');
+    if (!button) return;
+
+    const category = button.getAttribute('data-category');
+
+    // Atualiza os botões ativos
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-pink-600', 'text-white');
+        btn.classList.add('bg-white', 'text-gray-700');
+    });
+
+    button.classList.remove('bg-white', 'text-gray-700');
+    button.classList.add('bg-pink-600', 'text-white');
+
+    // Mostra/oculta os produtos com base na categoria
+    document.querySelectorAll('.product-card').forEach(product => {
+        const productCategory = product.getAttribute('data-category');
+        if (category === 'all' || productCategory === category) {
+            product.style.display = 'block';
+        } else {
+            product.style.display = 'none';
+        }
+    });
+});
+
                 // Update active button
                 categoryButtons.forEach(btn => {
                     btn.classList.remove('bg-pink-600', 'text-white');
@@ -1270,40 +1292,41 @@
                     productsContainer.insertAdjacentHTML('beforeend', productHTML);
                 });
 
-                // Reattach event listeners to new buttons
-                document.querySelectorAll('.add-to-cart').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const id = this.getAttribute('data-id');
-                        const name = this.getAttribute('data-name');
-                        const price = parseFloat(this.getAttribute('data-price'));
+        // Delegação de evento para botões "Adicionar"
+productsContainer.addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('add-to-cart')) {
+        const button = event.target;
+        const id = button.getAttribute('data-id');
+        const name = button.getAttribute('data-name');
+        const price = parseFloat(button.getAttribute('data-price'));
 
-                        const existingItem = cart.find(item => item.id === id);
+        const existingItem = cart.find(item => item.id === id);
 
-                        if (existingItem) {
-                            existingItem.quantity += 1;
-                        } else {
-                            cart.push({
-                                id,
-                                name,
-                                price,
-                                quantity: 1
-                            });
-                        }
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                id,
+                name,
+                price,
+                quantity: 1
+            });
+        }
 
-                        updateCart();
+        updateCart();
 
-                        // Add animation to button
-                        this.innerHTML = '<i class="fas fa-check"></i> Adicionado';
-                        this.classList.remove('bg-pink-100', 'text-pink-600');
-                        this.classList.add('bg-green-100', 'text-green-600');
+        // Feedback visual
+        button.innerHTML = '<i class="fas fa-check"></i> Adicionado';
+        button.classList.remove('bg-pink-100', 'text-pink-600');
+        button.classList.add('bg-green-100', 'text-green-600');
 
-                        setTimeout(() => {
-                            this.innerHTML = '+ Adicionar';
-                            this.classList.remove('bg-green-100', 'text-green-600');
-                            this.classList.add('bg-pink-100', 'text-pink-600');
-                        }, 1500);
-                    });
-                });
+        setTimeout(() => {
+            button.innerHTML = '+ Adicionar';
+            button.classList.remove('bg-green-100', 'text-green-600');
+            button.classList.add('bg-pink-100', 'text-pink-600');
+        }, 1500);
+    }
+});
 
                 // Hide load more button after loading all products
                 loadMoreBtn.style.display = 'none';
