@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaKa Makes - Cosméticos de Alta Qualidade</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="KAKA MAKES.jpg" type="image/x-icon">
+    <style>
+        :root {
+            --primary: #D81B60;
+            --primary-light: #f8bbd0;
+            --primary-dark: #880e4f;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            padding-top: 80px;
+        }
+
+        .cart-item-enter {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        .cart-item-enter-active {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 300ms ease;
+        }
+        .cart-item-exit {
+            opacity: 1;
+        }
+        .cart-item-exit-active {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 300ms ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .cart-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .whatsapp-btn:hover {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .hamburger span {
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Floating label animation */
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            color: #9ca3af;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -0.6rem;
+            left: 0.8rem;
+            font-size: 0.75rem;
+            background: white;
+            padding: 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.2);
+        }
+
+        /* Product badge */
+        .product-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" class="text-2xl font-bold text-pink-600 flex items-center" style="color: var(--primary);">
+                    <i class="fas fa-paint-brush mr-2"></i>
+                    KaKa Makes
+                </a>
+            </div>
+
+            <div class="hidden md:flex space-x-6">
+                <a href="#products" class="hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-store mr-1"></i> Produtos
+                </a>
+                <a href="#testimonials" class="hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-star mr-1"></i> Depoimentos
+                </a>
+                <a href="#about" class="hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-info-circle mr-1"></i> Sobre
+                </a>
+                <a href="#contact" class="hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-envelope mr-1"></i> Contato
+                </a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <button id="cart-btn" class="text-gray-700 hover:text-pink-600 transition cart-btn">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                </div>
+
+                <a href="https://wa.me/5514996651947" target="_blank" class="bg-green-500 text-white p-2 rounded-full whatsapp-btn transition">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                </a>
+
+                <button id="hamburger" class="md:hidden flex flex-col space-y-1.5">
+                    <span class="w-6 h-0.5 bg-gray-800"></span>
+                    <span class="w-6 h-0.5 bg-gray-800"></span>
+                    <span class="w-6 h-0.5 bg-gray-800"></span>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="mobile-menu md:hidden bg-white shadow-md">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#products" class="py-2 hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-store mr-2 w-5"></i> Produtos
+                </a>
+                <a href="#testimonials" class="py-2 hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-star mr-2 w-5"></i> Depoimentos
+                </a>
+                <a href="#about" class="py-2 hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-info-circle mr-2 w-5"></i> Sobre
+                </a>
+                <a href="#contact" class="py-2 hover:text-pink-600 transition flex items-center">
+                    <i class="fas fa-envelope mr-2 w-5"></i> Contato
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+
+   <!-- Products Section -->
+    <section id="products" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4" style="color: var(--primary);">Nossos Produtos 💄</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Descubra nossa linha completa de produtos de beleza que vão realçar sua beleza natural.</p>
+            </div>
+
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex rounded-md shadow-sm">
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium rounded-l-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="all">
+                        Todos
+                    </button>
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium border-t border-b border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="face">
+                        Rosto
+                    </button>
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="eyes">
+                        Olhos
+                    </button>
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium border-t border-b border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="lips">
+                        Lábios
+                    </button>
+                    <button type="button" class="category-btn px-4 py-2 text-sm font-medium rounded-r-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50" data-category="skincare">
+                        Skincare
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="products-container">     
+                     <!-- baby liss -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative" data-category="skincare">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center relative">
+                        <img src="babyliss.jpeg" alt="Baby Liss Rosa" class="h-full object-contain">
+                        <span class="product-badge">KaKaVIP</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Baby Liss Rosa</h3>
+                        <p class="text-gray-600 text-sm mb-3">O Babyliss ideal pra quem quer arrasar sem esforço: rápido, prático e com resultado de salão. Brilho, definição e aquele volume de milhões ✨</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold" style="color: var(--primary);">R$ 49,90</span>
+                                <span class="text-xs text-gray-500 line-through ml-1">R$ 57,30</span>
+                            </div>   
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="27" data-name="Baby Liss Rosa" data-price="49.90">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>   
+
+
+                <!-- primer -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative" data-category="face">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center relative">
+                        <img src="primer.jpg" alt="Primer Facial" class="h-full object-contain">
+                        <span class="product-badge">Mais vendido</span>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Primer Facial</h3>
+                        <p class="text-gray-600 text-sm mb-3">Prepara a pele para uma maquiagem perfeita e duradoura</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                                <span class="text-xs text-gray-500 line-through ml-1">R$ 17,99</span>
+                            </div>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="1" data-name="Primer Facial" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- corretivo.jpeg -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="face">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="corretivo.jpeg" alt="Corretivo STICK" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Corretivo STICK</h3>
+                        <p class="text-gray-600 text-sm mb-3">Alta cobertura, textura leve e efeito natural. Esconde olheiras, manchas e até os boletos se você passar direitinho 😎✨</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="2" data-name="Corretivo STICK" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Gloss Labial -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="lips">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="gloss.jpg" alt="Gloss Labial" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Gloss Labial</h3>
+                        <p class="text-gray-600 text-sm mb-3">Brilho intenso com hidratação prolongada</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="4" data-name="Gloss Labial" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sérum 10 em 1-->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="skincare">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="serun10em1.jpg" alt="Sérum 10 em 1" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Sérum 10 em 1</h3>
+                        <p class="text-gray-600 text-sm mb-3">Um aliado poderoso com múltiplos benefícios para sua pele</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="5" data-name="Sérum 10 em 1" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rímel -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="eyes">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="rimel.jpg" alt="Rímel" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Rímel</h3>
+                        <p class="text-gray-600 text-sm mb-3">Volume e comprimento sem grudar</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="6" data-name="Rímel" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🐻 Gloss Teddy VIVAI: brilho fofinho, poder real! -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="lips">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="GlossteddyVIVAI.jpeg" alt="🐻 Gloss Teddy VIVAI: brilho fofinho, poder real!" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">🐻 Gloss Teddy VIVAI: brilho fofinho, poder real!</h3>
+                        <p class="text-gray-600 text-sm mb-3">Textura confortável, cheirinho delicioso e aquele efeito molhado que deixa a boca irresistível. Pra quem ama lábios com carinha de “beijei e gostei” 😚💄</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="7" data-name="🐻 Gloss Teddy VIVAI: brilho fofinho, poder real!" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blush -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="face">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="blush.jpeg" alt="Blush" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Blush</h3>
+                        <p class="text-gray-600 text-sm mb-3">Cor natural e duradoura para suas maçãs</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="8" data-name="Blush" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!-- Água Micelar -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300" data-category="face">
+                    <div class="h-48 bg-pink-50 flex items-center justify-center">
+                        <img src="aguamicelar.jpg" alt="Água Micelar" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Água Micelar</h3>
+                        <p class="text-gray-600 text-sm mb-3">Limpa, demaquila e hidrata</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold" style="color: var(--primary);">R$ 15,99</span>
+                            <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 py-1 px-3 rounded-full text-sm transition" data-id="9" data-name="Água Micelar" data-price="15.99">
+                                + Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+
+
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="basesiliconada.jpg" alt="Base Siliconada" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Base Siliconada</h3>
+    <p class="text-gray-600 text-sm mb-3">Textura leve com acabamento aveludado</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,90</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="10" 
+              data-name="Base Siliconada" 
+              data-price="15.90">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+
+     <div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="eyes">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="cilios.jpg" alt="Cilíos" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Cilíos</h3>
+    <p class="text-gray-600 text-sm mb-3">Cilios para realçar sua beleza</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,90</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="11" 
+              data-name="Cilíos" 
+              data-price="15.90">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="kitesponja.jpg" alt="Esponja de Maquiagem" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Esponja de Maquiagem</h3>
+    <p class="text-gray-600 text-sm mb-3">Aplicação perfeita para base e corretivo</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,99</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="12" 
+              data-name="Esponja de Maquiagem" 
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+
+            <div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="eyes">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="cola.jpg" alt="Cola Para Cilíos" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Cola Para Cilíos</h3>
+    <p class="text-gray-600 text-sm mb-3">Fixação poderosa e acabamento natural</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,99</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="13" 
+              data-name="Cola Para Cilíos" 
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="skincare">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="esfoliante.jpg" alt="Esfoliante Facial" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Esfoliante Facial</h3>
+    <p class="text-gray-600 text-sm mb-3">Remove células mortas e deixa a pele renovada e macia.</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 19,99</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="15" 
+              data-name="Esfoliante Facial" 
+              data-price="19.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="lips">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="gloss2.jpg" alt="Gloss Super Bocão" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Gloss Super Bocão</h3>
+    <p class="text-gray-600 text-sm mb-3">Brilho extremo e efeito de volume instantâneo</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,99</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="16" 
+              data-name="Gloss Super Bocão" 
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="eyes">
+  <div class="h-48 bg-purple-50 flex items-center justify-center">
+    <img src="lapis.jpg" alt="Lápis de Olho" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Lápis de Olho</h3>
+    <p class="text-gray-700 text-sm mb-3">Pigmentação marcante e textura macia para seus olhos.</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-purple-600">R$ 6,99</span>
+      <button class="add-to-cart bg-purple-100 hover:bg-purple-200 text-purple-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="17" 
+              data-name="Lápis de Olho" 
+              data-price="6.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="lips">
+  <div class="h-48 bg-red-50 flex items-center justify-center">
+    <img src="lipgloss.jpg" alt="Lip Gloss VIVAI" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Lip Gloss VIVAI</h3>
+    <p class="text-gray-700 text-sm mb-3">Brilho intenso e hidratação</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-red-600">R$ 15,99</span>
+      <button class="add-to-cart bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="18" 
+              data-name="Lip Gloss VIVAI" 
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="skincare">
+  <div class="h-48 bg-green-50 flex items-center justify-center">
+    <img src="mascarafacial.jpg" alt="Máscara Facial" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Máscara Facial</h3>
+    <p class="text-gray-700 text-sm mb-3">Tratamento intenso para hidratar e renovar a pele.</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-green-600">R$ 15,99</span>
+      <button class="add-to-cart bg-green-100 hover:bg-green-200 text-green-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="19" 
+              data-name="Máscara Facial" 
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="eyes">
+  <div class="h-48 bg-purple-50 flex items-center justify-center">
+    <img src="mascarasparacilios.jpg" alt="Máscara para Cílios" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Máscara para Cílios</h3>
+    <p class="text-gray-700 text-sm mb-3">Alonga, dá volume e define até os cílios invisíveis</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-purple-600">R$ 15,99</span>
+      <button class="add-to-cart bg-purple-100 hover:bg-purple-200 text-purple-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="20" 
+              data-name="Máscara para Cílios" 
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="skincare">
+  <div class="h-48 bg-green-50 flex items-center justify-center">
+    <img src="micelar.jpg" alt="Água Micelar" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Água Micelar</h3>
+    <p class="text-gray-700 text-sm mb-3">Limpeza suave e eficaz para a pele.</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-green-600">R$ 15,99</span>
+      <button class="add-to-cart bg-green-100 hover:bg-green-200 text-green-600 px-3 py-1 rounded-full text-sm transition" 
+              data-id="21" 
+              data-name="Água Micelar" 
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="skincare">
+  <div class="h-48 bg-green-50 flex items-center justify-center">
+    <img src="serum.jpeg" alt="Sérum Redutor de Poros" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Sérum Redutor de Poros</h3>
+    <p class="text-gray-700 text-sm mb-3">Minimiza os poros e melhora a textura da pele</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-green-600">R$ 15,99</span>
+      <button class="add-to-cart bg-green-100 hover:bg-green-200 text-green-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="22"
+              data-name="Sérum Redutor de Poros"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="sombra1.jpg" alt="Paleta de Sombras" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Paleta de Sombras</h3>
+    <p class="text-gray-700 text-sm mb-3">Versátil e compacta para sua rotina de maquiagem.</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,99</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="23"
+              data-name="Paleta de Sombras"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="sombra2.jpg" alt="Paleta de Sombras Infinity" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Paleta de Sombras Infinity</h3>
+    <p class="text-gray-700 text-sm mb-3">Cores intensas, acabamento profissional e alta pigmentação</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,99</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="24"
+              data-name="Paleta de Sombras Infinity"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="sombra.jpg" alt="Paleta de Sombras Lua&Neve" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Paleta de Sombras Lua&Neve</h3>
+    <p class="text-gray-700 text-sm mb-3">Cores intensas, acabamento profissional e alta pigmentação</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,99</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="25"
+              data-name="Paleta de Sombras Lua&Neve"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="skincare">
+  <div class="h-48 bg-green-50 flex items-center justify-center">
+    <img src="Escova.jpeg" alt="Escova Desembaraçante Bellê - Verde" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Escova Desembaraçante Bellê - Verde</h3>
+    <p class="text-gray-700 text-sm mb-3">Cuida dos fios com carinho e sem puxões – edição limitada!</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-green-600">R$ 15,99</span>
+      <button class="add-to-cart bg-green-100 hover:bg-green-200 text-green-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="26"
+              data-name="Escova Desembaraçante Bellê - Verde"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="skincare">
+  <div class="h-48 bg-green-50 flex items-center justify-center">
+    <img src="toalha.jpg" alt="Toalhas Umedecidas" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Toalhas Umedecidas</h3>
+    <p class="text-gray-700 text-sm mb-3">Praticidade e cuidado com a pele no seu dia a dia.</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-green-600">R$ 15,99</span>
+      <button class="add-to-cart bg-green-100 hover:bg-green-200 text-green-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="28"
+              data-name="Toalhas Umedecidas"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="pincel.jpg" alt="Pincel De Sereia" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Pincel De Sereia</h3>
+    <p class="text-gray-700 text-sm mb-3">Precisão e Suavidade em Cada Passada.</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,99</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="29"
+              data-name="Pincel De Sereia"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-gray-50 flex items-center justify-center">
+    <img src="papel.jpg" alt="Lenços de Papel" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Lenços de Papel</h3>
+    <p class="text-gray-700 text-sm mb-3">Maciez que Abraça Você!</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-gray-800">R$ 2,49</span>
+      <button class="add-to-cart bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-full text-sm transition"
+              data-id="30"
+              data-name="Lenços de Papel"
+              data-price="2.49">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="eyes">
+  <div class="h-48 bg-orange-50 flex items-center justify-center">
+    <img src="DelineadolíquidoMeluLaranja.jpeg" alt="Delineado Melu Laranja" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Delineado Melu Laranja: ousadia em cada traço!</h3>
+    <p class="text-gray-700 text-sm mb-3">Secagem rápida, pigmentação surreal e durabilidade de festa até o after. Pra quem não passa despercebida nem no escuro ✨🧡</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-orange-600">R$ 15,99</span>
+      <button class="add-to-cart bg-orange-100 hover:bg-orange-200 text-orange-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="31"
+              data-name="Delineado Melu Laranja"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="skincare">
+  <div class="h-48 bg-blue-50 flex items-center justify-center">
+    <img src="serunparacravos.jpeg" alt="Sérum anti-cravos" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Sérum anti-cravos: limpeza profunda, pele renovada!</h3>
+    <p class="text-gray-700 text-sm mb-3">Diga adeus aos cravos teimosos com essa fórmula leve que desobstrui poros e deixa seu rosto lisinho, tipo filtro do Instagram — só que real! 😎💧</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-blue-600">R$ 15,99</span>
+      <button class="add-to-cart bg-blue-100 hover:bg-blue-200 text-blue-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="32"
+              data-name="Sérum anti-cravos"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="skincare">
+  <div class="h-48 bg-purple-50 flex items-center justify-center">
+    <img src="FrascoPumpEspumador.jpeg" alt="Frasco Pump Espumador" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">Frasco Pump Espumador: espuma na medida, zero desperdício!</h3>
+    <p class="text-gray-700 text-sm mb-3">Transforma sabonete líquido em espuma levinha. Ideal pra skincare, refis e até sabão caseiro. Prático, econômico e chique sem esforço! ✨🧴</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-purple-600">R$ 15,99</span>
+      <button class="add-to-cart bg-purple-100 hover:bg-purple-200 text-purple-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="33"
+              data-name="Frasco Pump Espumador"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-yellow-50 flex items-center justify-center">
+    <img src="Pósoltofacialdebanana10g.jpeg" alt="Pó Solto Banana 10g" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">🍌 Pó Solto Banana 10g: pele selada, make blindada!</h3>
+    <p class="text-gray-700 text-sm mb-3">Acabamento aveludado, controla a oleosidade e suaviza linhas finas. O segredinho das gringas direto pra sua necessaire ✨📸</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-yellow-600">R$ 15,99</span>
+      <button class="add-to-cart bg-yellow-100 hover:bg-yellow-200 text-yellow-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="34"
+              data-name="Pó Solto Banana 10g"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-pink-50 flex items-center justify-center">
+    <img src="Pincelprofissional2.jpeg" alt="Pincel Profissional nº2" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">🖌️ Pincel Profissional nº2: precisão que entrega tudo!</h3>
+    <p class="text-gray-700 text-sm mb-3">Cerdas macias, acabamento impecável e aquele toque de maquiador profissa. Ideal pra detalhes, contornos ou aquele esfumado de respeito! 🔥💋</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,99</span>
+      <button class="add-to-cart bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="35"
+              data-name="Pincel Profissional nº2"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="lips">
+  <div class="h-48 bg-red-50 flex items-center justify-center">
+    <img src="Lápisdecontornolabial.jpeg" alt="Lápis de Contorno Labial" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">💄 Lápis de Contorno Labial: definição que dura!</h3>
+    <p class="text-gray-700 text-sm mb-3">Desliza fácil, não borra e deixa os lábios com aquele efeito volumoso e bem desenhado. Pra boca de milhões sem esforço! 💥💋</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-red-600">R$ 15,99</span>
+      <button class="add-to-cart bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-full text-sm transition"
+              data-id="36"
+              data-name="Láp
+
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="all">
+  <div class="h-48 bg-pink-100 flex items-center justify-center">
+    <img src="necessaire.jpeg" alt="Necessaire Estilosa" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">👜 Necessaire Estilosa: tudo no lugar, com muito charme!</h3>
+    <p class="text-gray-700 text-sm mb-3">Compacta, resistente e cabe tudinho — makes, skincare, acessórios... Ideal pra levar na bolsa ou arrasar nas viagens! 💖✈️</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-pink-600">R$ 15,99</span>
+      <button class="add-to-cart bg-pink-200 hover:bg-pink-300 text-pink-800 px-3 py-1 rounded-full text-sm transition"
+              data-id="38"
+              data-name="Necessaire Estilosa"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-rose-50 flex items-center justify-center">
+    <img src="baseliquida.jpg" alt="Base Líquida" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">👑 Base Líquida: cobertura leve, pele de milhões!</h3>
+    <p class="text-gray-700 text-sm mb-3">Uniformiza, disfarça imperfeições e deixa um glow natural sem pesar. Fórmula confortável, pra usar no rolê ou no date sem medo! 💖✨</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-rose-600">R$ 15,99</span>
+      <button class="add-to-cart bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1 rounded-full text-sm transition"
+              data-id="39"
+              data-name="Base Líquida"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="all">
+  <div class="h-48 bg-yellow-100 flex items-center justify-center">
+    <img src="Escova.jpeg" alt="Escova de Cabelo" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">🌟 Escova de Cabelo: desembaraço sem drama!</h3>
+    <p class="text-gray-700 text-sm mb-3">Cerdas macias que deslizam suave, reduzem o frizz e deixam o cabelo soltinho e brilhante. Ideal pra todos os tipos de fio — do liso ao cacheado! 💆‍♀️✨</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-yellow-600">R$ 15,99</span>
+      <button class="add-to-cart bg-yellow-200 hover:bg-yellow-300 text-yellow-800 px-3 py-1 rounded-full text-sm transition"
+              data-id="40"
+              data-name="Escova de Cabelo"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+<div class="product-card bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300" data-category="face">
+  <div class="h-48 bg-neutral-100 flex items-center justify-center">
+    <img src="po.jpeg" alt="Pó Compacto" class="h-full object-contain" />
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg mb-1">🧼 Pó Compacto: pele selada, zero oleosidade!</h3>
+    <p class="text-gray-700 text-sm mb-3">Acabamento aveludado, controla o brilho e segura a make o dia inteiro. Leve, prático e indispensável na sua rotina! 💁‍♀️✨</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-neutral-800">R$ 15,99</span>
+      <button class="add-to-cart bg-neutral-200 hover:bg-neutral-300 text-neutral-900 px-3 py-1 rounded-full text-sm transition"
+              data-id="41"
+              data-name="Pó Compacto"
+              data-price="15.99">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+
+
