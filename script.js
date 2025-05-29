@@ -1,9 +1,9 @@
-console.log('JS funcionando!');
+
 
 
 
 document.addEventListener('DOMContentLoaded', function () {
- <script>
+ console.log('JS funcionando!');
 // ==========================
 // 🔥 Menu Mobile
 // ==========================
@@ -227,7 +227,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Inicia com carrinho atualizado
 updateCart();
 
-    </script>
 });
 
 
