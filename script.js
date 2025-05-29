@@ -1,4 +1,5 @@
-    <script>
+document.addEventListener('DOMContentLoaded', function () {
+ <script>
 // ==========================
 // 🔥 Menu Mobile
 // ==========================
@@ -223,3 +224,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 updateCart();
 
     </script>
+});
+
+
+
+
