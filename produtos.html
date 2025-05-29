@@ -957,6 +957,18 @@
     <button id="back-to-top" class="fixed bottom-20 right-6 bg-pink-600 text-white p-3 rounded-full shadow-lg hidden transition z-30">
         <i class="fas fa-arrow-up"></i>
     </button>
+<button id="pixCheckoutBtn" style="margin-top: 10px; padding: 10px 20px; background: #00a650; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  Pagar com Pix
+</button>
+
+<div id="pixPayment" style="margin-top: 20px; display: none;">
+  <h3>Escaneie o QR Code para pagar</h3>
+  <canvas id="pixQRCode"></canvas>
+  <p>Valor: R$ <span id="pixTotal"></span></p>
+</div>
+ 
+
+    <section>        
   <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
@@ -1019,7 +1031,7 @@
             </div>
         </div>
     </footer>
-
+</section>    
 <script src="script.js" defer></script>
 
 </body>
