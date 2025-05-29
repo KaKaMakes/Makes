@@ -1,3 +1,7 @@
+console.log('JS funcionando!');
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
  <script>
 // ==========================
