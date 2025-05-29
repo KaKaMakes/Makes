@@ -897,6 +897,64 @@
   </div>
 </div>
 
-<script src="script.js"></script>
+  <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-lg transform translate-x-full z-50 transition duration-300 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold flex items-center" style="color: var(--primary);">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Seu Carrinho 🛒
+                </h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div id="cart-items" class="mb-6">
+                <!-- Cart items will be added here dynamically -->
+                <div class="text-center py-8">
+                    <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">Seu carrinho está vazio</p>
+                    <a href="#products" class="inline-block mt-4 bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-6 rounded-full transition" onclick="closeCartSidebar()">
+                        Ver produtos
+                    </a>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-4 mb-4">
+                <div class="flex justify-between font-bold text-lg mb-4">
+                    <span>Total:</span>
+                    <span id="cart-total">R$ 0,00</span>
+                </div>
+
+                <a id="checkout-btn" href="https://wa.me/5514996651947" target="_blank" class="block bg-green-500 hover:bg-green-600 text-white text-center py-3 px-4 rounded-lg font-medium transition mb-3">
+                    Finalizar Compra pelo WhatsApp <i class="fab fa-whatsapp ml-1"></i>
+                </a>
+
+                <button id="continue-shopping" class="w-full border border-pink-600 text-pink-600 hover:bg-pink-50 py-3 px-4 rounded-lg font-medium transition">
+                    Continuar Comprando
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/5514996651947" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg whatsapp-btn transition z-30">
+        <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-20 right-6 bg-pink-600 text-white p-3 rounded-full shadow-lg hidden transition z-30">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+
+<script src="script.js" defer></script>
+
+</body>
+</html>
 
   
