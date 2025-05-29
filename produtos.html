@@ -1034,7 +1034,7 @@ pixCheckoutBtn.addEventListener('click', () => {
   QRCode.toCanvas(pixQRCodeCanvas, payload, { width: 250 }, (err) => {
     if (err) {
       console.error("QR Code", err);
-      alert("QR Code Pix Gerado com Sucesso. DEPOIS DE COMPRAR POR FAVOR CONTINUE PELO WHATSSAP");
+      alert("QR Code Pix Gerado com Sucesso. DEPOIS DE PAGAR CONTINUE PELO WhatsApp");
     } else {
       pixPaymentDiv.style.display = 'block';
       pixCodeDiv.textContent = payload;
