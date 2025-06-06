@@ -1296,6 +1296,17 @@ if (pixCodeTextarea) {
     alert('Falha ao copiar código PIX');
   }
 }
+document.querySelectorAll('.filter-btn').forEach(button =>
+  button.addEventListener('click', () => {
+    const category = button.dataset.category;
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.style.display =
+        category === 'all' || card.dataset.category === category
+          ? 'block'
+          : 'none';
+    });
+  })
+);
 
 </script>
 
