@@ -1276,9 +1276,26 @@ document.addEventListener('DOMContentLoaded', function () {
     document.execCommand('copy');
     alert('Código PIX copiado!');
   }
+const pixCodeTextarea = document.getElementById('pix-code');
+if(pixCodeTextarea) {
+  const total = getCartTotal().toFixed(2).replace('.', ',');
+  pixCodeTextarea.value = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${total}`;
+}
 
   updateCart();
 });
+        async function copyPixCode() {
+  try {
+    const textarea = document.getElementById('pix-code');
+    if (!textarea) return alert('Erro: Código PIX não encontrado');
+    
+    await navigator.clipboard.writeText(textarea.value);
+    alert('Código PIX copiado com sucesso!');
+  } catch (err) {
+    alert('Falha ao copiar código PIX');
+  }
+}
+
 </script>
 
 </body>
