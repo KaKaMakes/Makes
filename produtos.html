@@ -1277,9 +1277,10 @@ document.addEventListener('DOMContentLoaded', function () {
     alert('Código PIX copiado!');
   }
 const pixCodeTextarea = document.getElementById('pix-code');
-if(pixCodeTextarea) {
-  const total = getCartTotal().toFixed(2).replace('.', ',');
-  pixCodeTextarea.value = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${total}`;
+if (pixCodeTextarea) {
+  const total = getCartTotal();
+  const valorStr = total.toFixed(2).replace('.', ',');
+  pixCodeTextarea.value = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${valorStr}`;
 }
 
   updateCart();
