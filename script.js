@@ -1,4 +1,58 @@
 
+}
+const chavePix = "daianeaparecida369@gmail.com";
+const nomeLoja = "KAKAMAKES";
+
+document.getElementById('pixCheckoutBtn').addEventListener('click', () => {
+  const total = typeof getCartTotal === 'function' ? getCartTotal() : 0;
+
+  if (total <= 0) {
+    alert("Seu carrinho está vazio!");
+    return;
+  }
+
+  const valorStr = total.toFixed(2).replace('.', ',');
+  const pixCode = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${valorStr}`;
+
+  const html = `
+    <div class="mt-6 bg-pink-50 border border-pink-200 rounded-lg p-4">
+      <h4 class="font-bold text-pink-600 mb-2">Pagar com PIX</h4>
+      <p class="text-sm text-gray-700 mb-2">Copie e cole o código abaixo no seu app bancário:</p>
+      <textarea id="pix-code" readonly class="w-full p-2 rounded bg-white border border-gray-300 text-sm mb-2">${pixCode}</textarea>
+      <button onclick="copyPixCode()" class="bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded-full text-sm">Copiar código PIX</button>
+    </div>
+  `;
+
+  document.getElementById('pixContainer').innerHTML = html;
+});
+
+function copyPixCode() {
+  const textarea = document.getElementById('pix-code');
+  textarea.select();
+  document.execCommand('copy');
+  alert('Código PIX copiado!');
+}
+const chavePix = "daianeaparecida369@gmail.com";
+const nomeLoja = "KAKAMAKES";
+
+function atualizarPixBox() {
+  const total = typeof getCartTotal === 'function' ? getCartTotal() : 0;
+  if (total <= 0) return;
+
+  const valorStr = total.toFixed(2).replace('.', ',');
+  const pixCode = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${valorStr}`;
+  document.getElementById('pix-code').value = pixCode;
+}
+
+function copyPixCode() {
+  const textarea = document.getElementById('pix-code');
+  textarea.select();
+  document.execCommand('copy');
+  alert('Código Pix copiado!');
+}
+
+// Chama assim que o carrinho carregar:
+atualizarPixBox();
 
 
 
