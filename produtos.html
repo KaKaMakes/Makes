@@ -1069,34 +1069,66 @@
     </a>
 </section>
 
-<script>
-  const chavePix = "daianeaparecida369@gmail.com";
-  const nomeLoja = "KAKAMAKES";
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const chavePix = "daianeaparecida369@gmail.com";
+      const nomeLoja = "KAKAMAKES";
 
-  function copyPixCode() {
-    const textarea = document.getElementById('pix-code');
-    textarea.select();
-    document.execCommand('copy');
-    alert('Código PIX copiado!');
-  }
+      let cart = [];
 
-  function atualizarPixBox() {
-    const total = typeof getCartTotal === 'function' ? getCartTotal() : 0;
-    if (total <= 0) return;
+      function updateCart() {
+        const container = document.getElementById('cart-items');
+        const totalElem = document.getElementById('cart-total');
 
-    const valorStr = total.toFixed(2).replace('.', ',');
-    const pixCode = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${valorStr}`;
-    document.getElementById('pix-code').value = pixCode;
-  }
+        if (cart.length === 0) {
+          container.innerHTML = '<p class="text-sm text-gray-500">Seu carrinho está vazio.</p>';
+          totalElem.textContent = 'R$ 0,00';
+          return;
+        }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    console.log('JS funcionando!');
+        container.innerHTML = cart.map(item => `
+          <div class="flex justify-between items-center mb-2">
+            <span>${item.name} (${item.quantity}x)</span>
+            <span>R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</span>
+          </div>
+        `).join('');
 
-    // 🔥 PIX
-    const pixBtn = document.getElementById('pixCheckoutBtn');
-    if (pixBtn) {
-      pixBtn.addEventListener('click', () => {
-        const total = typeof getCartTotal === 'function' ? getCartTotal() : 0;
+        totalElem.textContent = `R$ ${getCartTotal().toFixed(2).replace('.', ',')}`;
+      }
+
+      function getCartTotal() {
+        return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      }
+
+      document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const name = btn.dataset.name;
+          const price = parseFloat(btn.dataset.price);
+
+          const existing = cart.find(i => i.id === id);
+          if (existing) {
+            existing.quantity++;
+          } else {
+            cart.push({ id, name, price, quantity: 1 });
+          }
+
+          updateCart();
+
+          btn.innerHTML = '<i class="fas fa-check"></i> Adicionado';
+          btn.classList.replace('bg-pink-100', 'bg-green-100');
+          btn.classList.replace('text-pink-600', 'text-green-600');
+
+          setTimeout(() => {
+            btn.innerHTML = '+ Adicionar';
+            btn.classList.replace('bg-green-100', 'bg-pink-100');
+            btn.classList.replace('text-green-600', 'text-pink-600');
+          }, 1500);
+        });
+      });
+
+      document.getElementById('pixCheckoutBtn').addEventListener('click', () => {
+        const total = getCartTotal();
 
         if (total <= 0) {
           alert("Seu carrinho está vazio!");
@@ -1107,45 +1139,27 @@
         const pixCode = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${valorStr}`;
 
         const html = `
-          <div class="mt-6 bg-pink-50 border border-pink-200 rounded-lg p-4">
+          <div class="bg-pink-100 border border-pink-200 rounded p-4">
             <h4 class="font-bold text-pink-600 mb-2">Pagar com PIX</h4>
-            <p class="text-sm text-gray-700 mb-2">Copie e cole o código abaixo no seu app bancário:</p>
-            <textarea id="pix-code" readonly class="w-full p-2 rounded bg-white border border-gray-300 text-sm mb-2">${pixCode}</textarea>
-            <button onclick="copyPixCode()" class="bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded-full text-sm">Copiar código PIX</button>
+            <p class="text-sm mb-2">Copie e cole o código abaixo no seu app bancário:</p>
+            <textarea id="pix-code" readonly class="w-full p-2 rounded bg-white border text-sm mb-2">${pixCode}</textarea>
+            <button onclick="copyPixCode()" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm">Copiar código PIX</button>
           </div>
         `;
 
         document.getElementById('pixContainer').innerHTML = html;
       });
-    }
 
-    // 🔥 Menu Mobile
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
+      window.copyPixCode = function () {
+        const textarea = document.getElementById('pix-code');
+        textarea.select();
+        document.execCommand('copy');
+        alert('Código PIX copiado!');
+      };
 
-    hamburger?.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      mobileMenu.classList.toggle('open');
+      updateCart();
     });
-
-    document.querySelectorAll('#mobile-menu a').forEach(link =>
-      link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('open');
-      })
-    );
-
-    // 🛒 Carrinho
-    // ... (manteve igual do jeito que tava funcionando, sem repetir aqui pra não ficar gigante)
-    // Coloca aqui todo o código que começa em:
-    // const cartBtn = document.getElementById('cart-btn');
-    // até o final do updateCart();
-
-    // Depois do updateCart()
-    updateCart();
-  });
-</script>
-
+  </script>
 </body>
 </html>
 
