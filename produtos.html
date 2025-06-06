@@ -1068,8 +1068,83 @@
 
    
  
-<script>
        
+<script src="script.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script>
+function crc16(payload) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < payload.length; i++) {
+    crc ^= payload.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+      crc &= 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+
+function montarPayloadPix(chavePix, valor, nome, cidade) {
+  const valorStr = Number(valor).toFixed(2);
+  const payload = 
+    "000201" +
+    "26" + (14 + chavePix.length).toString().padStart(2,'0') + "0014BR.GOV.BCB.PIX01" + chavePix.length.toString().padStart(2,'0') + chavePix +
+    "52040000" +
+    "5303986" +
+    "54" + valorStr.length.toString().padStart(2,'0') + valorStr +
+    "5802BR" +
+    "59" + nome.length.toString().padStart(2,'0') + nome +
+    "60" + cidade.length.toString().padStart(2,'0') + cidade +
+    "62070503***";
+
+  const crc = crc16(payload + "6304");
+  return payload + "6304" + crc;
+}
+
+const chavePix = "daianeaparecida369@gmail.com";
+const nomeLoja = "KAKAMAKES";
+const cidadeLoja = "OURINHOS";
+
+const pixCheckoutBtn = document.getElementById('pixCheckoutBtn');
+const pixPaymentDiv = document.getElementById('pixPayment');
+const pixTotalSpan = document.getElementById('pixTotal');
+const pixQRCodeCanvas = document.getElementById('pixQRCode');
+const pixCodeDiv = document.getElementById('pixCode');
+const copyBtn = document.getElementById('copyBtn');
+const copiedText = document.getElementById('copiedText');
+
+pixCheckoutBtn.addEventListener('click', () => {
+  const total = typeof getCartTotal === 'function' ? getCartTotal() : ;
+
+  if (total <= 0) {
+    alert("Seu carrinho está vazio!");
+    return;
+  }
+
+  const payload = montarPayloadPix(chavePix, total, nomeLoja, cidadeLoja);
+  pixTotalSpan.textContent = total.toFixed(2).replace('.', ',');
+
+  QRCode.toCanvas(pixQRCodeCanvas, payload, { width: 250 }, (err) => {
+    if (err) {
+      console.error("QR Code", err);
+      alert("QR Code Pix Gerado com Sucesso. DEPOIS DE PAGAR CONTINUE PELO WhatsApp");
+    } else {
+      pixPaymentDiv.style.display = 'block';
+      pixCodeDiv.textContent = payload;
+    }
+  });
+});
+
+copyBtn.addEventListener('click', () => {
+  const text = pixCodeDiv.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    copiedText.style.display = 'inline';
+    setTimeout(() => copiedText.style.display = 'none', 2000);
+  });
+});
+
+
+
  // PIX Copia e Cola
 const pixKey = 'daianeaparecida369@gmail.com';
 const totalFormatted = total.toFixed(2).replace('.', ',');
