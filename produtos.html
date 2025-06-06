@@ -1042,16 +1042,20 @@
         <i class="fas fa-arrow-up"></i>
     <div id="pixCheckoutBox" class="mt-4 p-4 border border-pink-200 rounded-lg bg-pink-50">
   <h4 class="font-bold text-pink-600 mb-2">Pagamento via Pix</h4>
-  <p class="text-sm text-gray-800">Clique no botão para copiar os dados de pagamento:</p>
-  <textarea id="pix-code" readonly class="w-full mt-2 mb-2 p-2 text-sm border rounded bg-white text-gray-700"></textarea>
+<div id="pixCheckoutBox" class="mt-4 p-4 border border-pink-200 rounded-lg bg-pink-50">
+  <h4 class="font-bold text-pink-600 mb-2">Pagamento via Pix</h4>
+  <p class="text-sm text-gray-800">Clique no botão para copiar a chave:</p>
+  <textarea id="pix-code" readonly class="w-full mt-2 mb-2 p-2 text-sm border rounded bg-white text-gray-700">daianeaparecida369@gmail.com</textarea>
   <button onclick="copyPixCode()" class="bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded-full text-sm">
-    Copiar código Pix
+    Copiar chave PIX
   </button>
 </div>
 
+</div>
+
   <div style="background: #fff7f7; border: 1px solid #ffc4c4; padding: 10px 15px; margin-top: 15px; border-radius: 8px; font-size: 0.9rem; color: #a33;">
-    ⚠️ <strong>Importante:</strong> Se o seu banco (ex: Mercado Pago, PagBank, RecargaPay) não reconhecer o QR Code, pague pela CHAVE: <strong>daianeaparecida369@gmail.com 
-</strong>Antes de Pagar sempre confira se o valor está correto... se não estiver nos avise por gentileza
+    ⚠️ <strong>Importante:</strong>  <strong>daianeaparecida369@gmail.com 
+</strong>Antes de Pagar sempre confira se o valor está correto... 
   </div>
 
 
@@ -1221,6 +1225,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const categoryButtons = document.querySelectorAll('.filter-btn');
   const productsContainer = document.getElementById('products-container');
+ const categoryButtons = document.querySelectorAll('.category-btn');
 
   categoryButtons.forEach(button =>
     button.addEventListener('click', () => {
@@ -1231,6 +1236,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     })
   );
+
 
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -1247,7 +1253,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
-
   document.getElementById('pixCheckoutBtn')?.addEventListener('click', () => {
     const total = typeof getCartTotal === 'function' ? getCartTotal() : 0;
     if (total <= 0) {
@@ -1270,12 +1275,17 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('pixContainer').innerHTML = html;
   });
 
-  function copyPixCode() {
-    const textarea = document.getElementById('pix-code');
-    textarea.select();
-    document.execCommand('copy');
-    alert('Código PIX copiado!');
-  }
+function copyPixCode() {
+  const textarea = document.getElementById('pix-code');
+  navigator.clipboard.writeText(textarea.value)
+    .then(() => {
+      alert('Chave PIX copiada!');
+    })
+    .catch(() => {
+      alert('Erro ao copiar! 😢');
+    });
+}
+
 const pixCodeTextarea = document.getElementById('pix-code');
 if (pixCodeTextarea) {
   const total = getCartTotal();
