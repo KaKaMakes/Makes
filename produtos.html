@@ -1223,10 +1223,6 @@ document.addEventListener('DOMContentLoaded', function () {
     })
   );
 
-  const categoryButtons = document.querySelectorAll('.filter-btn');
-  const productsContainer = document.getElementById('products-container');
- const categoryButtons = document.querySelectorAll('.category-btn');
-
   categoryButtons.forEach(button =>
     button.addEventListener('click', () => {
       const category = button.dataset.category;
@@ -1236,7 +1232,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     })
   );
-
 
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
