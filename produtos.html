@@ -1000,40 +1000,66 @@
   </div>
 </div>
 <section>
-<!-- Carrinho Sidebar -->
-  <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-lg transform translate-x-full z-50 transition duration-300 overflow-y-auto">
-    <div class="p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-xl font-bold flex items-center text-pink-600">
-          <i class="fas fa-shopping-cart mr-2"></i>
-          Seu Carrinho 🛒
-        </h3>
-        <button id="close-cart" class="text-gray-500 hover:text-gray-700">
-          <i class="fas fa-times text-xl"></i>
-        </button>
-      </div>
-      <div id="cart-items" class="mb-6"></div>
-      <div class="border-t border-gray-200 pt-4 mb-4">
-        <div class="flex justify-between font-bold text-lg mb-4">
-          <span>Total:</span>
-          <span id="cart-total">R$ 0,00</span>
-        </div>
-        <button id="pixCheckoutBtn" class="block w-full bg-green-500 hover:bg-green-600 text-white text-center py-3 px-4 rounded-lg font-medium transition mb-3">
-          Finalizar Compra com PIX
-        </button>
-        <button id="continue-shopping" class="w-full border border-pink-600 text-pink-600 hover:bg-pink-50 py-3 px-4 rounded-lg font-medium transition">
-          Continuar Comprando
-        </button>
-        <div id="pixContainer" class="mt-4"></div>
-        <div style="background: #fff7f7; border: 1px solid #ffc4c4; padding: 10px 15px; margin-top: 15px; border-radius: 8px; font-size: 0.9rem; color: #a33;">
-          ⚠️ <strong>Importante:</strong> Se o seu banco (ex: Mercado Pago, PagBank, RecargaPay) não reconhecer o QR Code, pague pela CHAVE: <strong>daianeaparecida369@gmail.com</strong> <strong>Antes de Pagar sempre confira se o valor está correto... se não estiver nos avise por gentileza</strong>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-lg transform translate-x-full z-50 transition duration-300 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold flex items-center" style="color: var(--primary);">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Seu Carrinho 🛒
+                </h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
 
-  <!-- Cart Overlay -->
-  <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+            <div id="cart-items" class="mb-6">
+                <!-- Cart items will be added here dynamically -->
+                <div class="text-center py-8">
+                    <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">Seu carrinho está vazio</p>
+                    <a href="#products" class="inline-block mt-4 bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-6 rounded-full transition" onclick="closeCartSidebar()">
+                        Ver produtos
+                    </a>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-4 mb-4">
+                <div class="flex justify-between font-bold text-lg mb-4">
+                    <span>Total:</span>
+                    <span id="cart-total">R$ 0,00</span>
+                </div>
+
+                <a id="checkout-btn" href="https://wa.me/5514996651947" target="_blank" class="block bg-green-500 hover:bg-green-600 text-white text-center py-3 px-4 rounded-lg font-medium transition mb-3">
+                    Finalizar Compra pelo WhatsApp <i class="fab fa-whatsapp ml-1"></i>
+                </a>
+
+                <button id="continue-shopping" class="w-full border border-pink-600 text-pink-600 hover:bg-pink-50 py-3 px-4 rounded-lg font-medium transition">
+                    Continuar Comprando
+                </button>
+                 <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-20 right-6 bg-pink-600 text-white p-3 rounded-full shadow-lg hidden transition z-30">
+        <i class="fas fa-arrow-up"></i>
+    <div id="pixCheckoutBox" class="mt-4 p-4 border border-pink-200 rounded-lg bg-pink-50">
+  <h4 class="font-bold text-pink-600 mb-2">Pagamento via Pix</h4>
+  <p class="text-sm text-gray-800">Clique no botão para copiar os dados de pagamento:</p>
+  <textarea id="pix-code" readonly class="w-full mt-2 mb-2 p-2 text-sm border rounded bg-white text-gray-700"></textarea>
+  <button onclick="copyPixCode()" class="bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded-full text-sm">
+    Copiar código Pix
+  </button>
+</div>
+
+  <div style="background: #fff7f7; border: 1px solid #ffc4c4; padding: 10px 15px; margin-top: 15px; border-radius: 8px; font-size: 0.9rem; color: #a33;">
+    ⚠️ <strong>Importante:</strong> Se o seu banco (ex: Mercado Pago, PagBank, RecargaPay) não reconhecer o QR Code, pague pela CHAVE: <strong>daianeaparecida369@gmail.com 
+</strong><strong>Antes de Pagar sempre confira se o valor está correto... se não estiver nos avise por gentileza</strong>
+  </div>
+Add commentMore actions
+  <
+
+            </div>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
 
     <!-- WhatsApp Float Button -->
     <a href="https://wa.me/5514996651947" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg whatsapp-btn transition z-30">
@@ -1042,115 +1068,286 @@
 </section>
 
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const chavePix = "daianeaparecida369@gmail.com";
-      const nomeLoja = "KAKAMAKES";
+ <script>
+document.addEventListener('DOMContentLoaded', function () {
+}
+const chavePix = "daianeaparecida369@gmail.com";Add commentMore actions
+const nomeLoja = "KAKAMAKES";
+document.getElementById('pixCheckoutBtn').addEventListener('click', () => {Add commentMore actions
+  const total = typeof getCartTotal === 'function' ? getCartTotal() : 0;
+  if (total <= 0) {
+    alert("Seu carrinho está vazio!");Add commentMore actions
+    return;
+          
+  const valorStr = total.toFixed(2).replace('.', ',');Add commentMore actions
+  const pixCode = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${valorStr}`;
+          const html = `
+    <div class="mt-6 bg-pink-50 border border-pink-200 rounded-lg p-4">
+      <h4 class="font-bold text-pink-600 mb-2">Pagar com PIX</h4>
+      <p class="text-sm text-gray-700 mb-2">Copie e cole o código abaixo no seu app bancário:</p>
+      <textarea id="pix-code" readonly class="w-full p-2 rounded bg-white border border-gray-300 text-sm mb-2">${pixCode}</textarea>
+      <button onclick="copyPixCode()" class="bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded-full text-sm">Copiar código PIX</button>
+    </div>
+  `;
 
-      let cart = [];
+  document.getElementById('pixContainer').innerHTML = html;
+});
 
-      function updateCart() {
-        const container = document.getElementById('cart-items');
-        const totalElem = document.getElementById('cart-total');
+function copyPixCode() {
+  const textarea = document.getElementById('pix-code');
+  textarea.select();
+  document.execCommand('copy');
+  alert('Código PIX copiado!');
+}
+const chavePix = "daianeaparecida369@gmail.com";
+const nomeLoja = "KAKAMAKES";
 
-        if (cart.length === 0) {
-          container.innerHTML = '<p class="text-sm text-gray-500">Seu carrinho está vazio.</p>';
-          totalElem.textContent = 'R$ 0,00';
-          return;
-        }
+function atualizarPixBox() {
+  const total = typeof getCartTotal === 'function' ? getCartTotal() : 0;
+  if (total <= 0) return;
 
-        container.innerHTML = cart.map(item => `
-          <div class="flex justify-between items-center mb-2">
-            <span>${item.name} (${item.quantity}x)</span>
-            <span>R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</span>
-          </div>
-        `).join('');
+  const valorStr = total.toFixed(2).replace('.', ',');
+  const pixCode = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${valorStr}`;
+  document.getElementById('pix-code').value = pixCode;
+}
 
-        totalElem.textContent = `R$ ${getCartTotal().toFixed(2).replace('.', ',')}`;
-      }
+function copyPixCode() {
+  const textarea = document.getElementById('pix-code');
+  textarea.select();
+  document.execCommand('copy');
+  alert('Código Pix copiado!');
+}
 
-      function getCartTotal() {
-        return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      }
+// Chama assim que o carrinho carregar:
+atualizarPixBox();
 
-      document.querySelectorAll('.add-to-cart').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.dataset.id;
-          const name = btn.dataset.name;
-          const price = parseFloat(btn.dataset.price);
 
-          const existing = cart.find(i => i.id === id);
-          if (existing) {
-            existing.quantity++;
-          } else {
-            cart.push({ id, name, price, quantity: 1 });
-          }
 
-          updateCart();
+document.addEventListener('DOMContentLoaded', function () {
+ console.log('JS funcionando!');
+// ==========================
+// 🔥 Menu Mobile
+// ==========================
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
 
-          btn.innerHTML = '<i class="fas fa-check"></i> Adicionado';
-          btn.classList.replace('bg-pink-100', 'bg-green-100');
-          btn.classList.replace('text-pink-600', 'text-green-600');
+hamburger?.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
 
-          setTimeout(() => {
-            btn.innerHTML = '+ Adicionar';
-            btn.classList.replace('bg-green-100', 'bg-pink-100');
-            btn.classList.replace('text-green-600', 'text-pink-600');
-          }, 1500);
-        });
-      });
+document.querySelectorAll('#mobile-menu a').forEach(link =>
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  })
+);
 
-      document.getElementById('pixCheckoutBtn').addEventListener('click', () => {
-        const total = getCartTotal();
+// ==========================
+// 🛒 Carrinho
+// ==========================
+const cartBtn = document.getElementById('cart-btn');
+const closeCart = document.getElementById('close-cart');
+const cartSidebar = document.getElementById('cart-sidebar');
+const cartOverlay = document.getElementById('cart-overlay');
+const continueShopping = document.getElementById('continue-shopping');
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotal = document.getElementById('cart-total');
+const cartCount = document.getElementById('cart-count');
+const checkoutBtn = document.getElementById('checkout-btn');
 
-        if (total <= 0) {
-          alert("Seu carrinho está vazio!");
-          return;
-        }
+let cart = [];
 
-        const valorStr = total.toFixed(2).replace('.', ',');
-        const pixCode = `Pagamento para ${nomeLoja}\nChave PIX: ${chavePix}\nValor: R$ ${valorStr}`;
+const toggleCart = (show) => {
+  cartSidebar.classList.toggle('translate-x-full', !show);
+  cartOverlay.classList.toggle('hidden', !show);
+  document.body.style.overflow = show ? 'hidden' : 'auto';
+};
 
-        const html = `
-          <div class="bg-pink-100 border border-pink-200 rounded p-4">
-            <h4 class="font-bold text-pink-600 mb-2">Pagar com PIX</h4>
-            <p class="text-sm mb-2">Copie e cole o código abaixo no seu app bancário:</p>
-            <textarea id="pix-code" readonly class="w-full p-2 rounded bg-white border text-sm mb-2">${pixCode}</textarea>
-            <button onclick="copyPixCode()" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm">Copiar código PIX</button>
-          </div>
-        `;
+cartBtn?.addEventListener('click', () => toggleCart(true));
+closeCart?.addEventListener('click', () => toggleCart(false));
+cartOverlay?.addEventListener('click', () => toggleCart(false));
+continueShopping?.addEventListener('click', () => toggleCart(false));
 
-        document.getElementById('pixContainer').innerHTML = html;
-      });
+// Função que renderiza o carrinho
+function updateCart() {
+  cartItemsContainer.innerHTML = cart.length
+    ? cart.map(renderCartItem).join('')
+    : renderEmptyCart();
 
-      window.copyPixCode = function () {
-        const textarea = document.getElementById('pix-code');
-        textarea.select();
-        document.execCommand('copy');
-        alert('Código PIX copiado!');
-      };
+  cartTotal.textContent = `R$ ${getCartTotal().toFixed(2).replace('.', ',')}`;
+  cartCount.textContent = getItemCount();
 
+  setWhatsAppCheckout();
+  addCartItemEventListeners();
+}
+
+function renderCartItem(item) {
+  return `
+    <div class="cart-item flex justify-between items-center py-3 border-b border-gray-100">
+      <div>
+        <h4 class="font-medium">${item.name}</h4>
+        <p class="text-sm text-gray-500">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+      </div>
+      <div class="flex items-center">
+        <button class="decrease-quantity px-2" data-id="${item.id}">
+          <i class="fas fa-minus text-xs text-gray-500 hover:text-pink-600"></i>
+        </button>
+        <span class="mx-2">${item.quantity}</span>
+        <button class="increase-quantity px-2" data-id="${item.id}">
+          <i class="fas fa-plus text-xs text-gray-500 hover:text-pink-600"></i>
+        </button>
+        <button class="remove-item ml-4" data-id="${item.id}">
+          <i class="fas fa-trash text-gray-500 hover:text-red-500"></i>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderEmptyCart() {
+  return `
+  }
+    <div class="text-center py-8">
+      <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+      <p class="text-gray-500">Seu carrinho está vazio</p>
+      <a href="#products" class="mt-4 inline-block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-6 rounded-full transition" onclick="toggleCart(false)">
+        Ver produtos
+      </a>
+    </div>
+  `;
+}
+
+function getCartTotal() {
+  return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+
+function getItemCount() {
+  return cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+function setWhatsAppCheckout() {
+  if (cart.length === 0) return;
+  const msg = cart.map(item =>
+    `- ${item.name} (${item.quantity}x) - R$ ${(item.price * item.quantity).toFixed(2)}`
+  ).join('\n');
+
+  const total = getCartTotal().toFixed(2);
+  const text = `Olá! Gostaria de comprar os seguintes produtos:\n\n${msg}\n\nTotal: R$ ${total}`;
+  checkoutBtn.href = `https://wa.me/5514996651947?text=${encodeURIComponent(text)}`;
+}
+
+function addCartItemEventListeners() {
+  document.querySelectorAll('.decrease-quantity').forEach(btn =>
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      const item = cart.find(i => i.id === id);
+      if (item.quantity > 1) item.quantity--;
+      else cart = cart.filter(i => i.id !== id);
       updateCart();
+    })
+  );
 
-      // Abrir/Fechar carrinho
-      const cartSidebar = document.getElementById('cart-sidebar');
-      const cartOverlay = document.getElementById('cart-overlay');
-      document.querySelectorAll('.add-to-cart').forEach(btn => {
-        btn.addEventListener('click', () => {
-          cartSidebar.classList.remove('translate-x-full');
-          cartOverlay.classList.remove('hidden');
-        });
-      });
-      document.getElementById('close-cart').addEventListener('click', () => {
-        cartSidebar.classList.add('translate-x-full');
-        cartOverlay.classList.add('hidden');
-      });
-      document.getElementById('continue-shopping').addEventListener('click', () => {
-        cartSidebar.classList.add('translate-x-full');
-        cartOverlay.classList.add('hidden');
-      });
+  document.querySelectorAll('.increase-quantity').forEach(btn =>
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      const item = cart.find(i => i.id === id);
+      item.quantity++;
+      updateCart();
+    })
+  );
+
+  document.querySelectorAll('.remove-item').forEach(btn =>
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      cart = cart.filter(i => i.id !== id);
+      updateCart();
+    })
+  );
+}
+
+addToCartButtons.forEach(button =>
+  button.addEventListener('click', () => {
+    const id = button.dataset.id;
+    const name = button.dataset.name;
+    const price = parseFloat(button.dataset.price);
+
+    const item = cart.find(i => i.id === id);Add commentMore actions
+    item ? item.quantity++ : cart.push({ id, name, price, quantity: 1 });
+             updateCart();
+            button.innerHTML = '<i class="fas fa-check"></i> Adicionado';
+    button.classList.replace('bg-pink-100', 'bg-green-100');
+    button.classList.replace('text-pink-600', 'text-green-600');
+
+    setTimeout(() => {
+      button.innerHTML = '+ Adicionar';
+      button.classList.replace('bg-green-100', 'bg-pink-100');
+      button.classList.replace('text-green-600', 'text-pink-600');
+    }, 1500);
+  })
+);
+
+// ==========================
+// 🧩 Filtro por Categoria
+// ==========================
+const categoryButtons = document.querySelectorAll('.category-btn');
+const productsContainer = document.getElementById('products-container');
+
+categoryButtons.forEach(button =>
+  button.addEventListener('click', () => {
+    categoryButtons.forEach(btn =>Add commentMore actions
+      btn.classList.replace('bg-pink-600', 'bg-white') ||
+      btn.classList.replace('text-white', 'text-gray-700')
+    );
+                          button.classList.replace('bg-white', 'bg-pink-600');Add commentMore actions
+    button.classList.replace('text-gray-700', 'text-white');
+           const category = button.dataset.category;
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.style.display =
+        category === 'all' || card.dataset.category === category ? 'block' : 'none';
     });
-  </script>
+  })
+);
+
+// ==========================
+// 🔝 Scroll Top
+// ==========================
+const backToTopButton = document.getElementById('back-to-top');
+
+window.addEventListener('scroll', () => {
+  backToTopButton?.classList.toggle('hidden', window.pageYOffset <= 300);Add commentMore actions
+});
+
+backToTopButton?.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ==========================
+// 🧭 Âncoras com Scroll Suave
+// ==========================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const targetId = this.getAttribute('href');
+    if (targetId === '#') return;
+    e.preventDefault();
+
+    const el = document.querySelector(targetId);
+    if (el) {
+      window.scrollTo({
+        top: el.offsetTop - 80,
+        behavior: 'smooth',
+                   });
+    }Add commentMore actions
+  });
+});
+
+// Inicia com carrinho atualizado
+updateCart();
+        });
+
+
+         </script>
 </body>
 </html>
 
