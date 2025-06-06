@@ -1041,7 +1041,8 @@
     </a>
 </section>
 
- <script>
+
+  <script>
     document.addEventListener('DOMContentLoaded', function () {
       const chavePix = "daianeaparecida369@gmail.com";
       const nomeLoja = "KAKAMAKES";
@@ -1130,6 +1131,24 @@
       };
 
       updateCart();
+
+      // Abrir/Fechar carrinho
+      const cartSidebar = document.getElementById('cart-sidebar');
+      const cartOverlay = document.getElementById('cart-overlay');
+      document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', () => {
+          cartSidebar.classList.remove('translate-x-full');
+          cartOverlay.classList.remove('hidden');
+        });
+      });
+      document.getElementById('close-cart').addEventListener('click', () => {
+        cartSidebar.classList.add('translate-x-full');
+        cartOverlay.classList.add('hidden');
+      });
+      document.getElementById('continue-shopping').addEventListener('click', () => {
+        cartSidebar.classList.add('translate-x-full');
+        cartOverlay.classList.add('hidden');
+      });
     });
   </script>
 </body>
